@@ -1,0 +1,15 @@
+{
+  "[typescript][javascript][html][css][json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "files.associations": {
+    "*.css": "postcss"
+  },
+  "svelte.enable-ts-plugin": true,
+  "editor.tabSize": 2
+}
