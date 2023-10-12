@@ -14,8 +14,6 @@
     route: Route,
     ctx: Context
   ) {
-    console.log(lang, slug)
-
     if (!(lang in toc)) {
       return ctx.rewrite('/404')
     }
@@ -29,7 +27,6 @@
     }
 
     const { default: content } = await article.file()
-    console.log(content)
 
     return {
       title: article.title,
