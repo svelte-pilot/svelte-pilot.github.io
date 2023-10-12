@@ -20,7 +20,18 @@
   },
   "ssg": [
     "/",
-    "/en/introduction"
+    "/en/introduction",
+    "/en/creating-a-project",
+    "/en/routing",
+    "/en/ssr",
+    "/en/router",
+    "/en/link",
+    "/zh/introduction",
+    "/zh/creating-a-project",
+    "/zh/routing",
+    "/zh/ssr",
+    "/zh/router",
+    "/zh/link"
   ],
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231010.0",
