@@ -26,7 +26,7 @@ export default class ClientContext implements Context {
     return undefined
   }
 
-  negotiateLanguage(available: string[]) {
+  language(available: string[]) {
     return negotiateLanguage(navigator.languages, available)
   }
 

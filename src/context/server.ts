@@ -47,7 +47,7 @@ export default class ServerContext implements Context {
     return this.reqHeaders[name.toLowerCase()]
   }
 
-  negotiateLanguage(available: string[]) {
+  language(available: string[]) {
     return negotiateLanguage(
       parseAcceptLanguage(this.reqHeaders['accept-language']),
       available

@@ -19,7 +19,7 @@ export interface Context {
   redirect(path: string, statusCode?: number): void
   setHeader(name: string, value: string | string[]): void
   getHeader(name: string): string | undefined
-  negotiateLanguage(available: string[]): string
+  language(available: string[]): string
   setCookie(name: string, value: string, options?: CookieOptions): void
   getCookie(name: string): string | undefined
   removeCookie(name: string): void

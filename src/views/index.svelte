@@ -5,7 +5,7 @@
 
   export async function load(props: {}, route: Route, ctx: Context) {
     ctx.redirect(
-      `/${ctx.getCookie('lang') || ctx.negotiateLanguage(langs)}/introduction`
+      `/${ctx.getCookie('lang') || ctx.language(langs)}/introduction`
     )
   }
 </script>

@@ -17,7 +17,7 @@ export default new Router({
 
     {
       path: '/:lang/:slug',
-      component: () => import('./views/doc.svelte'),
+      component: () => import('./views/Doc.svelte'),
       meta: route => ({ lang: route.params.string('lang') }),
       props: route => ({
         lang: route.params.string('lang'),
