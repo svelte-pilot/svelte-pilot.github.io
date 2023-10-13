@@ -45,4 +45,7 @@
 {@debug lang}
 {@debug slug}
 {@debug title}
-{@html content}
+
+<article class="prose prose-pre:not-prose">
+  {@html content}
+</article>
