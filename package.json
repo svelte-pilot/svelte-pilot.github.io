@@ -5,16 +5,14 @@
   "type": "module",
   "scripts": {
     "dev:spa": "vite",
-    "build:spa": "vite build",
-    "start:static": "sirv dist --single --host --port 5173",
     "dev:ssr": "VITE_SVELTE_HYDRATABLE=1 node ssr-dev-server",
-    "build:ssr": "export VITE_SVELTE_HYDRATABLE=1 && vite build --ssrManifest --outDir ${CSR_OUT:-dist/client} && vite build --ssr src/adapters/${ADAPTER}/index.ts --outDir ${SSR_OUT:-dist/server} && rm ${CSR_OUT:-dist/client}/ssr-manifest.json",
-    "build:node": "ADAPTER=node npm run build:ssr",
+    "build:spa": "vite build",
+    "build:ssr": "export VITE_SVELTE_HYDRATABLE=1 && vite build --ssrManifest --outDir ${CSR_OUT:-dist/client} && vite build --ssr src/adapters/${ADAPTER:-node}/index.ts --outDir ${SSR_OUT:-dist/server} && rm ${CSR_OUT:-dist/client}/ssr-manifest.json",
     "build:cloudflare": "ADAPTER=cloudflare CSR_OUT=dist SSR_OUT=functions npm run build:ssr && cp src/adapters/cloudflare/_routes.json dist && mv functions/index.js functions/[[catchall]].js",
     "build:netlify": "ADAPTER=netlify npm run build:ssr",
     "build:netlify-edge": "ADAPTER=netlify-edge npm run build:ssr",
     "build:ssg": "ADAPTER=ssg CSR_OUT=dist SSR_OUT=.ssg npm run build:ssr && node .ssg/index.js && rm -rf .ssg",
-    "start:node": "cd dist/server && node index.js",
+    "start:ssr": "node dist/server/index.js",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "md2html": "node md2html.js"
   },
@@ -35,8 +33,8 @@
   ],
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231010.0",
-    "@netlify/functions": "^2.2.1",
     "@sveltejs/vite-plugin-svelte": "^2.4.6",
+    "@tailwindcss/typography": "^0.5.10",
     "@tsconfig/svelte": "^5.0.2",
     "@types/node": "^20.8.4",
     "marked": "^9.1.0",
@@ -47,7 +45,6 @@
     "prettier-plugin-tailwindcss": "^0.5.5",
     "rollup-plugin-import-meta-url-to-module": "^0.3.0",
     "shiki": "^0.14.5",
-    "svelte": "^4.2.1",
     "svelte-check": "^3.5.2",
     "svelte-preprocess-css-hash": "^0.1.7",
     "svelte-preprocess-html-asset": "^0.1.7",
@@ -57,9 +54,10 @@
     "vite": "^4.4.11"
   },
   "dependencies": {
+    "@netlify/functions": "^2.2.1",
     "cookie.js": "^7.0.1",
     "sirv": "^2.0.3",
-    "sirv-cli": "^2.0.2",
+    "svelte": "^4.2.1",
     "svelte-pilot": "0.6.0-6"
   }
 }
