@@ -1,14 +1,20 @@
-import type { Context, CookieOptions, StringKV } from './context-interface'
+import negotiateLanguage from './negotiateLanguage'
+import parseAcceptLanguage from './parseAcceptLanguage'
+import setCookieHeader from './setCookieHeader'
+import type { Context, CookieOptions, StringKV } from './type'
 
 export default class ServerContext implements Context {
   statusCode?: number
   statusMessage?: string
   _rewrite?: string
   headers: Record<string, string | string[] | undefined> = {}
+  reqHeaders: StringKV = {}
   cookies: StringKV = {}
 
   constructor(headers?: StringKV) {
     if (headers) {
+      this.reqHeaders = headers
+
       const cookies = headers.cookie
         ? Object.fromEntries(
             new URLSearchParams(headers.cookie.replace(/;\s*/g, '&')).entries()
@@ -37,69 +43,25 @@ export default class ServerContext implements Context {
     this.headers[name.toLowerCase()] = value
   }
 
-  setCookie(
-    name: string,
-    value: string,
-    {
-      domain,
-      expires,
-      maxAge,
-      partitioned,
-      path,
-      sameSite,
-      secure,
-      httpOnly
-    }: CookieOptions = {}
-  ) {
-    let cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value)
+  getHeader(name: string) {
+    return this.reqHeaders[name.toLowerCase()]
+  }
 
-    if (domain) {
-      cookie += '; Domain=' + domain
-    }
+  negotiateLanguage(available: string[]) {
+    return negotiateLanguage(
+      parseAcceptLanguage(this.reqHeaders['accept-language']),
+      available
+    )
+  }
 
-    if (expires) {
-      if (expires.constructor === Number) {
-        expires = new Date(expires)
-      }
-
-      cookie +=
-        '; Expires=' +
-        (expires instanceof Date ? expires.toUTCString() : expires)
-    }
-
-    if (maxAge || maxAge === 0) {
-      cookie += '; Max-Age=' + maxAge
-    }
-
-    if (partitioned) {
-      cookie += '; Partitioned'
-    }
-
-    if (path) {
-      cookie += '; Path=' + path
-    }
-
-    if (sameSite) {
-      cookie += '; SameSite=' + sameSite
-
-      if (sameSite === 'None') {
-        secure = true
-      }
-    }
-
-    if (secure) {
-      cookie += '; Secure'
-    }
-
-    if (httpOnly) {
-      cookie += '; HttpOnly'
-    }
-
+  setCookie(name: string, value: string, options: CookieOptions = {}) {
     if (!this.headers['set-cookie']) {
       this.headers['set-cookie'] = []
     }
 
-    ;(this.headers['set-cookie'] as string[]).push(cookie)
+    ;(this.headers['set-cookie'] as string[]).push(
+      setCookieHeader(name, value, options)
+    )
   }
 
   getCookie(name: string) {

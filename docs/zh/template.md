@@ -85,3 +85,13 @@ wrangler pages deploy dist
 ### Netlify
 
 使用 CLI `netlify deploy` 部署，或将您的 Git 仓库链接到 Netlify。
+
+
+## 常见问题
+
+### Windows 上无法运行
+
+```sh
+npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
+```
+[How to set shell for npm run-scripts in Windows](https://stackoverflow.com/questions/23243353/how-to-set-shell-for-npm-run-scripts-in-windows)

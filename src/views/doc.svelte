@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import type { Route } from 'svelte-pilot'
-  import toc from '../toc'
-  import type { Context } from '../context-interface'
+  import toc from '../lib/toc'
+  import type { Context } from '../context/type'
 
   export async function load(
     {
