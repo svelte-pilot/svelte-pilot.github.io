@@ -1,3 +1,4 @@
+import { decode } from 'html-entities'
 import { Marked } from 'marked'
 import { getHeadingList, gfmHeadingId } from 'marked-gfm-heading-id'
 import { markedHighlight } from 'marked-highlight'
@@ -43,7 +44,8 @@ for (const file of files) {
         const outputPath = path.join(outputDir, path.basename(file) + '.html')
         await fs.writeFile(outputPath, htmlContent)
         const headings = getHeadingList()
-        chapter[headings.find(h => h.level === 1).text] = { headings, file }
+        headings.forEach(item => (item.text = decode(item.text)))
+        chapter[headings[0].text] = { headings, file }
       }
     }
 

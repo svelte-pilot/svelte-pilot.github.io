@@ -68,10 +68,10 @@ The `context` object when calling the `load` function on the client side. Creati
 ### callLoadOnClient
 Indicates whether to call the `load` function on the client side.
 
-## router.current
+## current
 The current [Route](#route) object. Available only on the client side.
 
-## Router.start()
+## start()
 
 ```ts
 start(
@@ -102,7 +102,7 @@ Provides the data returned by the server’s `load` function to the client for h
 ### path
 Used to initialize the router's path. It can be a URL string or a [Location](#location) type object. It defaults to the current webpage's URL. If the provided URL is different from the current webpage’s URL, it will call `Router.handleClient()` to render the corresponding route but not navigate. This parameter can be used to prevent page navigation, for instance, when the server renders a 404 or 500 page.
 
-## Router.handleClient()
+## handleClient()
 
 ```ts
 handleClient(location: string | Location, ssrState?: SSRState): Promise<Route | undefined | false>
@@ -110,7 +110,7 @@ handleClient(location: string | Location, ssrState?: SSRState): Promise<Route | 
 
 A router method used for handling navigation during client-side rendering. Use this method if you want to render a route but don’t want `history.pushState()` or `history.replaceState()` to be executed. If a [Route](#route) type object is returned, it means the route was matched and successfully rendered. If `undefined` is returned, no route was matched. If `false` is returned, a route was matched but was intercepted by a route guard.
 
-## Router.handleServer()
+## handleServer()
 
 ```ts
 handleServer(location: string | Location, loadFunctionContext?: unknown): Promise<Route | undefined>
@@ -118,7 +118,7 @@ handleServer(location: string | Location, loadFunctionContext?: unknown): Promis
 
 A router method used for handling requests during server-side rendering. Refer to [server-side rendering](ssr) for details.
 
-## Router.parseLocation()
+## parseLocation()
 
 ```ts
 parseLocation(location: string | Location): Pick<Route, "path" | "query" | "search" | "hash" | "state" | "href">
@@ -137,7 +137,7 @@ Parses a [Location](#location) type object or URL string and returns a subset of
 }
 ```
 
-## Router.href()
+## href()
 
 ```ts
 href(location: string | Location): string
@@ -145,7 +145,7 @@ href(location: string | Location): string
 
 A URL string that can be assigned to the `href` attribute of an `<a>` tag and the `location.href` attribute. If your router is based on `pathQuery`, it will include `search` and `hash` but not `path`, because routers based on `pathQuery` do not care about the path.
 
-## Router.push()
+## push()
 
 ```ts
 push(location: string | Location): Promise<void>
@@ -153,7 +153,7 @@ push(location: string | Location): Promise<void>
 
 Navigates to `location` and calls `history.pushState()` to change the current page's URL.
 
-## Router.replace()
+## replace()
 
 ```ts
 replace(location: string | Location): Promise<void>
@@ -161,7 +161,7 @@ replace(location: string | Location): Promise<void>
 
 Navigates to `location` and calls `history.replaceState()` to change the current page's URL.
 
-## Router.setState()
+## setState()
 
 ```ts
 setState(state: Record<string, unknown>): void
@@ -169,7 +169,7 @@ setState(state: Record<string, unknown>): void
 
 Merges `state` into the current route’s `state` and calls `history.replaceState()`.
 
-## Router.go()
+## go()
 
 ```ts
 go(position: number, state?: Record<string, unknown>): void
@@ -177,7 +177,7 @@ go(position: number, state?: Record<string, unknown>): void
 
 Calls `history.go()`. If `state` is set, it will merge `state` into the destination route’s `state` and call `history.replaceState()`.
 
-## Router.back()
+## back()
 
 ```ts
 back(state?: Record<string, unknown>): void
@@ -185,7 +185,7 @@ back(state?: Record<string, unknown>): void
 
 An alias for `router.go(-1, state)`.
 
-## Router.forward()
+## forward()
 
 ```ts
 forward(state?: Record<string, unknown>): void
@@ -193,7 +193,7 @@ forward(state?: Record<string, unknown>): void
 
 An alias for `router.go(1, state)`.
 
-## Router.on()
+## on()
 
 ```ts
 router.on('beforeChange', handler: NavigationGuard)
@@ -241,7 +241,7 @@ Triggered when an error occurs during the route change.
 7. Call the `update` event handler.
 8. Call the `afterChange` event handler.
 
-## Router.off()
+## off()
 
 ```ts
 router.off(event: Event, handler: EventHandler)
@@ -249,7 +249,7 @@ router.off(event: Event, handler: EventHandler)
 
 Removes the event listener from the router.
 
-## Router.once()
+## once()
 
 ```ts
 router.once(event: Event, handler: EventHandler)

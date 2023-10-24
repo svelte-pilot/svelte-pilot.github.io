@@ -68,10 +68,10 @@ const router = new Router({
 ### callLoadOnClient
 是否在客户端调用 `load` 函数。
 
-## router.current
+## current
 当前 [Route](#route) 对象。只在客户端可用。
 
-## Router.start()
+## start()
 
 ```ts
 start(
@@ -102,7 +102,7 @@ start(
 ### path
 用于初始化路由器的路径。可以是 URL 字符串或者 [Location](#location) 类型对象。默认为当前网页的 URL。如果提供的 URL 与当前网页的 URL 不同，则会调用 `Router.handleClient()` 渲染对应的路由但不进行跳转。比如当服务端渲染的是 404 或 500 页面时，我们可以在客户端渲染时使用此参数防止页面跳转。
 
-## Router.handleClient()
+## handleClient()
 
 ```ts
 handleClient(location: string | Location, ssrState?: SSRState): Promise<Route | undefined | false>
@@ -110,7 +110,7 @@ handleClient(location: string | Location, ssrState?: SSRState): Promise<Route | 
 
 客户端渲染时，用于处理导航的路由器方法。如果你想要渲染一个路由但不希望 `history.pushState()` 或 `history.replaceState` 被执行，可以使用此方法。如果返回 [Route](#route) 类型对象，表示匹配到了路由并成功渲染；如果返回 `undefined`，表示没有匹配到路由；如果返回 `false`，表示匹配到了路由但被路由守卫拦截了。
 
-## Router.handleServer()
+## handleServer()
 
 ```ts
 handleServer(location: string | Location, loadFunctionContext?: unknown): Promise<Route | undefined>
@@ -119,7 +119,7 @@ handleServer(location: string | Location, loadFunctionContext?: unknown): Promis
 服务端渲染时，用于处理请求的路由器方法。详情请参考 [服务端渲染](ssr)。
 
 
-## Router.parseLocation()
+## parseLocation()
 
 ```ts
 parseLocation(location: string | Location): Pick<Route, "path" | "query" | "search" | "hash" | "state" | "href">
@@ -138,7 +138,7 @@ parseLocation(location: string | Location): Pick<Route, "path" | "query" | "sear
 }
 ```
 
-## Router.href()
+## href()
 
 ```ts
 href(location: string | Location): string
@@ -146,7 +146,7 @@ href(location: string | Location): string
 
 可以赋值给 `<a>` 标签的 `href` 属性和 `location.href` 属性的 URL 字符串。如果你的路由器基于 `pathQuery`，它将包含 `search` 和 `hash` 但不包含 `path`，因为基于 `pathQuery` 的路由是不关心路径的。
 
-## Router.push()
+## push()
 
 ```ts
 push(location: string | Location): Promise<void>
@@ -154,7 +154,7 @@ push(location: string | Location): Promise<void>
 
 导航到 `location` 并调用 `history.pushState()` 更改当前页面的 URL。
 
-## Router.replace()
+## replace()
 
 
 ```ts
@@ -163,7 +163,7 @@ replace(location: string | Location): Promise<void>
 
 导航到 `location` 并调用 `history.replaceState()` 更改当前页面的 URL。
 
-## Router.setState()
+## setState()
 
 ```ts
 setState(state: Record<string, unknown>): void
@@ -171,7 +171,7 @@ setState(state: Record<string, unknown>): void
 
 将 `state` 合并到当前路由的 `state` 并调用 `history.replaceState()`。
 
-## Router.go()
+## go()
 
 ```ts
 go(position: number, state?: Record<string, unknown>): void
@@ -179,7 +179,7 @@ go(position: number, state?: Record<string, unknown>): void
 
 调用 `history.go()`。如果设置了 `state`，则会将 `state` 合并到目的地路由的 `state` 并调用 `history.replaceState()`。
 
-## Router.back()
+## back()
   
 ```ts
 back(state?: Record<string, unknown>): void
@@ -187,7 +187,7 @@ back(state?: Record<string, unknown>): void
 
 `router.go(-1, state)` 的别名。
 
-## Router.forward()
+## forward()
 
 ```ts
 forward(state?: Record<string, unknown>): void
@@ -195,7 +195,7 @@ forward(state?: Record<string, unknown>): void
 
 `router.go(1, state)` 的别名。
 
-## Router.on()
+## on()
 
 ```ts
 router.on('beforeChange', handler: NavigationGuard)
@@ -243,7 +243,7 @@ type Errorhandler = (error: unknown) => void
 6. 调用 `update` 事件处理器。
 7. 调用 `afterChange` 事件处理器。
 
-## Router.off()
+## off()
 
 ```ts
 router.off(event: Event, handler: EventHandler)
@@ -251,7 +251,7 @@ router.off(event: Event, handler: EventHandler)
 
 移除路由器事件监听器。
 
-## Router.once()
+## once()
 
 ```ts
 router.once(event: Event, handler: EventHandler)

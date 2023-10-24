@@ -25,6 +25,6 @@
   export let content: string
 </script>
 
-<article class="prose prose-pre:not-prose">
+<article class="prose prose-pre:not-prose max-w-none">
   {@html content}
 </article>

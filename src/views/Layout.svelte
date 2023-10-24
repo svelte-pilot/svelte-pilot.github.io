@@ -23,16 +23,20 @@
       ?.headings.filter(h => h.level <= 2) || []
 </script>
 
-<div class="flex">
-  <nav>
-    <ul>
+<svelte:head>
+  <title>{headings[0].text}</title>
+</svelte:head>
+
+<div class="flex max-w-screen-2xl mx-auto">
+  <nav class="w-40 shrink-0">
+    <ul class="sticky top-0">
       {#each Object.entries(toc) as [chapterName, sections]}
         <li>
-          <span>{@html chapterName}</span>
+          <span>{chapterName}</span>
           <ul>
             {#each Object.entries(sections) as [sectionName, section]}
               <li>
-                <Link to="/{lang}/{section.file}">{@html sectionName}</Link>
+                <Link to="/{lang}/{section.file}">{sectionName}</Link>
               </li>
             {/each}
           </ul>
@@ -41,7 +45,7 @@
     </ul>
   </nav>
 
-  <main>
+  <main class="shrink">
     <View />
   </main>
 
@@ -50,7 +54,7 @@
     <ul>
       {#each headings as { id, text }}
         <li>
-          <a href="#{id}">{@html text}</a>
+          <a href="#{id}">{text}</a>
         </li>
       {/each}
     </ul>

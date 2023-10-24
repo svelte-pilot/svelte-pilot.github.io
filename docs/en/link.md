@@ -1,4 +1,4 @@
-# `<Link>` Component
+# \<Link>
 
 The `<Link>` component is used to navigate to a specified route. It is similar in use to the `<a>` tag, but by default, it uses the HTML5 History API and therefore does not refresh the page. The content of the `<Link>` component is rendered as an `<a>` tag.
 

@@ -1,4 +1,4 @@
-# Svelte Pilot Template
+# 模板
 
 基于 [Svelte Pilot](https://github.com/jiangfengming/svelte-pilot) 路由库的模板，提供了服务端渲染（SSR）和其他丰富功能。
 

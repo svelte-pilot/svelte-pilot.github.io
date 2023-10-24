@@ -6,7 +6,7 @@
 npm create vite@latest my-svelte-app -- --template svelte
 ```
 
-遵从提示执行命令。一切顺利的话，你的浏览器应该能成功打开项目主页了。或者你可以访问 https://vite.new/svelte 通过在线IDE继续本教程。
+遵循提示执行命令。一切顺利的话，你的浏览器应该能成功打开项目主页了。或者你可以访问 https://vite.new/svelte 通过在线IDE继续本教程。
 
 接下来，我们在项目中安装`svelte-pilot`：
 

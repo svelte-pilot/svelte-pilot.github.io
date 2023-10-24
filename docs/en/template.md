@@ -1,4 +1,4 @@
-# Svelte Pilot Template
+# Template
 
 A template based on the [Svelte Pilot](https://github.com/jiangfengming/svelte-pilot) routing library, offering server-side rendering (SSR) and other rich features.
 
