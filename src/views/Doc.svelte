@@ -1,36 +1,20 @@
 <script context="module" lang="ts">
-  import type { Route } from 'svelte-pilot'
-  import toc from '../lib/toc'
-  import type { Context } from '../context/type'
+  import type { LoadFunction } from 'svelte-pilot'
+  import type { Context } from '../context/types'
+  import docs from '../docs'
 
-  export async function load(
-    {
-      lang,
-      slug
-    }: {
-      lang: string
-      slug: string
-    },
-    route: Route,
-    ctx: Context
-  ) {
-    if (!(lang in toc)) {
+  export const load: LoadFunction<
+    { lang: string; slug: string },
+    Context
+  > = async ({ lang, slug }, route, ctx) => {
+    const doc = docs[`../.html/${lang}/${slug}.html`]
+
+    if (!doc) {
       return ctx.rewrite('/404')
     }
-
-    const article = toc[lang as keyof typeof toc]
-      .flatMap((chapter) => chapter.sections)
-      .find((article) => article.slug === slug)
-
-    if (!article) {
-      return ctx.rewrite('/404')
-    }
-
-    const { default: content } = await article.file()
 
     return {
-      title: article.title,
-      content
+      content: await doc()
     }
   }
 </script>
@@ -38,13 +22,8 @@
 <script lang="ts">
   export let lang: string
   export let slug: string
-  export let title: string
   export let content: string
 </script>
-
-{@debug lang}
-{@debug slug}
-{@debug title}
 
 <article class="prose prose-pre:not-prose">
   {@html content}

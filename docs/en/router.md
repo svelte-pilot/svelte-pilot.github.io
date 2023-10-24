@@ -338,7 +338,9 @@ A string starting with `#`, followed by the URL fragment identifier.
 ### state
 Used to set `history.state`.
 
-## Accessing `Router` Instance and `$route` Store from Component Context
+## Miscellaneous
+
+### Accessing `Router` Instance and `$route` Store from Component Context
 
 Although rarely needed, you can access the `Router` instance and `$route` store from the component context:
 

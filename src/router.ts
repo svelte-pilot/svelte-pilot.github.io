@@ -1,4 +1,7 @@
 import { Router } from 'svelte-pilot'
+import { langs } from './global'
+
+const langParam = ':lang(' + langs.join('|') + ')'
 
 export default new Router({
   callLoadOnClient: true,
@@ -10,19 +13,29 @@ export default new Router({
     },
 
     {
-      path: '/:lang',
+      path: `/${langParam}`,
       component: () => import('./views/index.svelte'),
-      props: route => ({ lang: route.params.string('lang') })
+      props: route => ({
+        lang: route.params.string('lang')
+      })
     },
 
     {
-      path: '/:lang/:slug',
-      component: () => import('./views/Doc.svelte'),
-      meta: route => ({ lang: route.params.string('lang') }),
+      component: () => import('./views/Layout.svelte'),
       props: route => ({
         lang: route.params.string('lang'),
         slug: route.params.string('slug')
-      })
+      }),
+      children: [
+        {
+          path: `/${langParam}/:slug`,
+          component: () => import('./views/Doc.svelte'),
+          props: route => ({
+            lang: route.params.string('lang'),
+            slug: route.params.string('slug')
+          })
+        }
+      ]
     },
 
     {

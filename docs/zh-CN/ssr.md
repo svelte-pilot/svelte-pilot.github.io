@@ -22,68 +22,58 @@ SSR 的主要代码结构如下：
 ```js
 /// file: ssr-dev-server.js
 import fs from 'fs'
-import http from 'http'
-import path from 'path'
-import { createServer } from 'vite'
+import { createServer } from 'http'
+import { createServer as createViteDevServer } from 'vite'
 
 const PORT = Number(process.env.PORT) || 5173
 
-const vite = await createServer({
+const vite = await createViteDevServer({
   server: { middlewareMode: true },
   appType: 'custom'
 })
 
-http
-  .createServer((req, res) => {
-    vite.middlewares(req, res, async () => {
-      try {
-        // 1. Read index.html
-        let template = fs.readFileSync(
-          path.resolve(process.cwd(), 'index.html'),
-          'utf-8'
-        )
+createServer((req, res) => {
+  vite.middlewares(req, res, async () => {
+    try {
+      // 1. Read index.html
+      let template = fs.readFileSync('index.html', 'utf-8')
 
-        // 2. Apply vite HTML transforms. This injects the vite HMR client, and
-        //    also applies HTML transforms from Vite plugins, e.g. global preambles
-        //    from @vitejs/plugin-react-refresh
-        template = await vite.transformIndexHtml(req.url, template)
+      // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
+      //    and also applies HTML transforms from Vite plugins, e.g. global
+      //    preambles from @vitejs/plugin-react
+      template = await vite.transformIndexHtml(req.url, template)
 
-        // 3. Load the server entry. vite.ssrLoadModule automatically transforms
-        //    your ESM source code to be usable in Node.js! There is no bundling
-        //    required, and provides efficient invalidation similar to HMR.
-        const { default: render } = await vite.ssrLoadModule('/src/render.js')
+      // 3. Load the server entry. ssrLoadModule automatically transforms
+      //    ESM source code to be usable in Node.js! There is no bundling
+      //    required, and provides efficient invalidation similar to HMR.
+      const { default: render } = await vite.ssrLoadModule('/src/render.ts')
 
-        // 4. render the app HTML. This assumes entry-server.js's exported `render`
-        //    function calls appropriate framework SSR APIs,
-        //    e.g. ReacDOMServer.renderToString()
-        const { statusCode, statusMessage, headers, body, error } =
-          await render({
-            url: req.url,
-            template,
-            headers: req.headers
-          })
+      // 4. render the app HTML. This assumes entry-server.js's exported
+      //     `render` function calls appropriate framework SSR APIs,
+      //    e.g. ReactDOMServer.renderToString()
+      const {
+        statusCode = 200,
+        statusMessage,
+        headers,
+        body
+      } = await render({
+        url: req.url,
+        template,
+        headers: req.headers
+      })
 
-        if (error) {
-          throw error
-        }
-
-        if (statusMessage) {
-          res.statusMessage = statusMessage
-        }
-
-        res.writeHead(statusCode, headers)
-        res.end(body)
-      } catch (e) {
-        // If an error is caught, let vite fix the stracktrace so it maps back to
-        // your actual source code.
-        vite.ssrFixStacktrace(e)
-        console.error(e)
-        res.writeHead(500, { 'Content-Type': 'text/plain' })
-        res.end(e.message)
-      }
-    })
+      res.writeHead(statusCode, statusMessage, headers)
+      res.end(body)
+    } catch (e) {
+      // If an error is caught, let Vite fix the stack trace so it maps back
+      // to your actual source code.
+      vite.ssrFixStacktrace(e)
+      console.error(e)
+      res.writeHead(500, { 'Content-Type': 'text/plain' })
+      res.end(e.message)
+    }
   })
-  .listen(PORT)
+}).listen(PORT)
 
 console.log(`Server running at http://localhost:${PORT}`)
 ```
@@ -190,7 +180,7 @@ export default defineConfig({
 
 现在，我们可以在命令行中运行 `node ssr-dev-server.js` 来启动开发环境 HTTP 服务，然后访问 `http://localhost:5173` 来查看效果。
 
-我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题，这在开发模式下不可避免。在生产模式下，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `true` 来解决。更精细的控制可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) 项目。
+我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题。在生产模式下，对于使用了 Tailwind CSS 的项目，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `true` 来解决。如果你的 CSS 太大，需要按需加载，可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) 项目。
 
 ## 服务端入口
 
@@ -198,7 +188,7 @@ export default defineConfig({
 
 ```js
 /// file: src/server.js
-import http from 'http'
+import { createServer } from 'http'
 import sirv from 'sirv'
 import render from './render'
 import template from '../dist/client/index.html?raw'
@@ -206,31 +196,29 @@ import template from '../dist/client/index.html?raw'
 const PORT = Number(process.env.PORT) || 5173
 const serve = sirv('../client')
 
-http
-  .createServer(async (req, res) => {
-    console.log(req.url)
+createServer(async (req, res) => {
+  console.log(req.url)
 
-    serve(req, res, async () => {
-      const {
-        statusCode = 200,
-        statusMessage,
-        headers,
-        body
-      } = await render({
-        url: req.url,
-        template,
-        headers: req.headers
-      })
-
-      if (statusMessage) {
-        res.statusMessage = statusMessage
-      }
-
-      res.writeHead(statusCode, headers)
-      res.end(body)
+  serve(req, res, async () => {
+    const {
+      statusCode = 200,
+      statusMessage,
+      headers,
+      body
+    } = await render({
+      url: req.url,
+      template,
+      headers: req.headers
     })
+
+    if (statusMessage) {
+      res.statusMessage = statusMessage
+    }
+
+    res.writeHead(statusCode, headers)
+    res.end(body)
   })
-  .listen(PORT)
+}).listen(PORT)
 
 console.log(`Server running at http://localhost:${PORT}`)
 ```
@@ -287,7 +275,8 @@ npm i sirv
 
 #### 不使用 HTML5 History API
 
-不使用 `router.push()` 和 `router.replace()`，而是使用 `location.href` 进行路由跳转；调用 [setLinkMethod(null)](link#设置全局默认-method) 使 `<Link>` 组件的默认行为与普通 `<a>` 标签一致。或者直接使用 `<a>` 标签。这样我们就回避了 HTML5 History API 的问题。
+- 不使用 `router.push()` 和 `router.replace()`，而是使用 `location.href` 进行路由跳转；
+- 将 `<Link>` 组件的[默认 `method`](link#设置全局默认属性) 设为 `null` 禁止其调用 HTML5 History API。或者直接使用 `<a>` 标签。
 
 #### 使用 `$:` 标记监听组件 props
 

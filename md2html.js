@@ -1,42 +1,55 @@
-import { Marked } from "marked";
-import { markedHighlight } from "marked-highlight";
-import fs from "node:fs/promises";
-import path from "path";
-import shiki from "shiki";
+import { Marked } from 'marked'
+import { getHeadingList, gfmHeadingId } from 'marked-gfm-heading-id'
+import { markedHighlight } from 'marked-highlight'
+import fs from 'node:fs/promises'
+import path from 'path'
+import shiki from 'shiki'
+import toc from './docs/toc.json' assert { type: 'json' }
 
-const highlighter = await shiki.getHighlighter({});
+const highlighter = await shiki.getHighlighter({})
 
 const marked = new Marked(
   markedHighlight({
-    highlight: (code, lang) => highlighter.codeToHtml(code, { lang }),
+    highlight: (code, lang) => highlighter.codeToHtml(code, { lang })
   })
-);
+)
 
-async function md2html(dir) {
-  try {
-    const files = await fs.readdir(dir, { withFileTypes: true });
+marked.use(gfmHeadingId())
 
-    for (const file of files) {
-      const fullPath = path.join(dir, file.name);
+const files = await fs.readdir('docs', { withFileTypes: true })
 
-      if (file.isDirectory()) {
-        await md2html(fullPath);
-      } else if (file.isFile() && path.extname(file.name) === ".md") {
-        const content = await fs.readFile(fullPath, "utf-8");
-        const htmlContent = await marked.parse(content);
-        const outputDir = path.join(".html", path.relative("docs", dir));
-        const outputPath = path.join(
-          outputDir,
-          path.basename(file.name, ".md") + ".html"
-        );
+for (const file of files) {
+  if (file.isDirectory()) {
+    const lang = file.name
+    const outputDir = path.join('.html', lang)
+    await fs.mkdir(outputDir, { recursive: true })
 
-        await fs.mkdir(outputDir, { recursive: true });
-        await fs.writeFile(outputPath, htmlContent);
+    const { default: messages } = await import(`./docs/${lang}/messages.json`, {
+      assert: { type: 'json' }
+    })
+
+    const _toc = {}
+
+    for (const [chapterId, files] of Object.entries(toc)) {
+      const chapter = (_toc[messages[chapterId]] = {})
+
+      for (const file of files) {
+        const content = await fs.readFile(
+          path.join('docs', lang, file + '.md'),
+          'utf-8'
+        )
+
+        const htmlContent = await marked.parse(content)
+        const outputPath = path.join(outputDir, path.basename(file) + '.html')
+        await fs.writeFile(outputPath, htmlContent)
+        const headings = getHeadingList()
+        chapter[headings.find(h => h.level === 1).text] = { headings, file }
       }
     }
-  } catch (error) {
-    console.error("Error converting markdown files:", error);
+
+    await fs.writeFile(
+      path.join(outputDir, 'toc.json'),
+      JSON.stringify(_toc, null, 2)
+    )
   }
 }
-
-md2html("docs");

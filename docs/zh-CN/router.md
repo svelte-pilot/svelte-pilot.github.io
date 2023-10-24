@@ -340,7 +340,9 @@ type Location = {
 ### state
 用于设置 `history.state`。
 
-## 从组件 context 中获取 `Router` 实例和 `$route` store
+## 其他
+
+### 从组件 context 中获取 `Router` 实例和 `$route` store
 
 虽然很少需要用到，但你可以从组件 context 中获取 `Router` 实例和 `$route` store：
 

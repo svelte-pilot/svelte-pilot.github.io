@@ -1,0 +1,18 @@
+{
+  "guide": [
+    "introduction",
+    "creating-a-project",
+    "routing",
+    "ssr",
+    "link",
+    "template"
+  ],
+  "components": [
+    "link",
+    "client-app",
+    "server-app"
+  ],
+  "api": [
+    "router"
+  ]
+}

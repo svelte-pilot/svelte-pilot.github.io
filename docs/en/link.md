@@ -16,10 +16,14 @@ The `<Link>` component comes with a `.router-link` CSS class. If the current rou
 
 ## Setting Global Default Method
 
-If your SSR `load` function does not support being called on the client side, you can set the global default method to `null` by calling the `setLinkMethod` function.
-
 ```js
-import { setLinkMethod } from 'svelte-pilot'
+import { linkOptions, setLinkOptions } from 'svelte-pilot'
 
-setLinkMethod(null)
+console.log(linkOptions)
+
+setLinkOptions({
+  method: null, // 'push' | 'replace' | null
+  class: 'my-link',
+  activeClass: 'my-link-active'
+})
 ```

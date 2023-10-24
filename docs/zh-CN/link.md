@@ -14,12 +14,16 @@
 
 `<Link>` 组件自带 `.router-link` CSS 类，如果当前路由匹配 `to` 属性指定的路由，则会添加 `.router-link-active` CSS 类。你可以通过传递 `class` 属性来添加自定义的 CSS 类。其他属性会被原样传递给 `<a>` 标签。
 
-## 设置全局默认 method
-
-如果你的 SSR `load` 函数不支持在客户端调用，你可以通过调用 `setLinkMethod` 函数来设置全局默认 `method` 为 `null`。
+## 设置全局默认属性
 
 ```js
-import { setLinkMethod } from 'svelte-pilot'
+import { linkOptions, setLinkOptions } from 'svelte-pilot'
 
-setLinkMethod(null)
+console.log(linkOptions)
+
+setLinkOptions({
+  method: null, // 'push' | 'replace' | null
+  class: 'my-link',
+  activeClass: 'my-link-active'
+})
 ```
