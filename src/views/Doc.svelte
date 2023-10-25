@@ -10,7 +10,7 @@
     const doc = docs[`../.html/${lang}/${slug}.html`]
 
     if (!doc) {
-      return ctx.rewrite('/404')
+      ctx.rewrite('/404')
     }
 
     return {
@@ -25,6 +25,6 @@
   export let content: string
 </script>
 
-<article class="prose prose-pre:not-prose max-w-none">
+<article class="prose prose-slate prose-pre:overflow-auto max-w-screen-md">
   {@html content}
 </article>

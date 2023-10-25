@@ -15,7 +15,7 @@ The main code structure for SSR is as follows:
   - main.js            // Client entry point
 ```
 
-## HTTP Service for Development Environment
+## Development Server
 
 In the development environment, we need an HTTP service to provide SSR and HMR (Hot Module Replacement) features. Example:
 
