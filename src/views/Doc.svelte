@@ -20,8 +20,6 @@
 </script>
 
 <script lang="ts">
-  export let lang: string
-  export let slug: string
   export let content: string
 </script>
 

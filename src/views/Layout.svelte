@@ -8,7 +8,8 @@
 
   export const load: LoadFunction<{ lang: string }> = async ({ lang }) => {
     const { default: toc } = await import(`../../.html/${lang}/toc.json`)
-    return { toc }
+    const { default: messages } = await import(`../i18n/${lang}.json`)
+    return { toc, messages }
   }
 
   load.cacheKey = ['lang']
@@ -18,6 +19,7 @@
   export let lang: string
   export let slug: string
   export let toc: Toc
+  export let messages: Record<string, string>
 
   $: headings =
     Object.values(toc)
@@ -80,8 +82,9 @@
   <aside class="w-64 px-8 shrink-0">
     <div class="sticky top-0">
       <h2 class="font-semibold text-slate-500 tracking-widest uppercase py-4">
-        On this page
+        {messages.on_this_page}
       </h2>
+
       <ul>
         {#each headings as { id, text }}
           <li class="my-2">
