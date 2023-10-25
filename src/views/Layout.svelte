@@ -33,27 +33,27 @@
   <title>{headings[0].text}</title>
 </svelte:head>
 
-<div class="flex w-fit mx-auto min-h-screen">
-  <nav class="w-64 shrink-0 px-8 bg-slate-100">
+<div class="flex w-fit mx-auto">
+  <nav class="fixed hidden w-64 shrink-0 px-8 bg-slate-100">
     <div class="sticky top-0">
       <Link
         to="/"
         class="text-xl py-4 flex items-center border-b border-b-slate-300"
       >
         <img src="../favicon.svg" alt="logo" width="32" height="32" />
-        <span class="tracking-wider ml-2 text-slate-800">Svelte Pilot</span>
+        <span class="tracking-wide ml-2 text-slate-800">Svelte Pilot</span>
       </Link>
 
       <ul class="py-4">
         {#each Object.entries(toc) as [chapterName, sections]}
           <li class="mb-4">
-            <span class="font-semibold text-slate-500 tracking-widest uppercase"
+            <span class="font-semibold text-slate-500 tracking-wider uppercase"
               >{chapterName}</span
             >
             <ul>
               {#each Object.entries(sections) as [sectionName, section]}
                 <li class="my-2">
-                  <Link to="/{lang}/{section.file}" class="text-slate-800"
+                  <Link to="/{lang}/{section.file}" class="text-slate-700"
                     >{sectionName}</Link
                   >
                 </li>
@@ -65,8 +65,8 @@
     </div>
   </nav>
 
-  <main class="shrink grow">
-    <div class="text-right px-4 pt-4">
+  <main class="max-w-[100vw] w-[768px] p-4 sm:p-6 md:p-8">
+    <div class="text-right mb-4">
       {#if lang === 'en'}
         <Link to="/zh-CN/{slug}" class="text-slate-800">中文</Link>
       {:else}
@@ -74,12 +74,10 @@
       {/if}
     </div>
 
-    <div class="p-8">
-      <View />
-    </div>
+    <View />
   </main>
 
-  <aside class="w-64 px-8 shrink-0">
+  <aside class="hidden w-64 px-8 shrink-0">
     <div class="sticky top-0">
       <h2 class="font-semibold text-slate-500 tracking-widest uppercase py-4">
         {messages.on_this_page}

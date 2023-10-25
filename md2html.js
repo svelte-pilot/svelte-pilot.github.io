@@ -1,19 +1,52 @@
 import { decode } from 'html-entities'
 import { Marked } from 'marked'
 import { getHeadingList, gfmHeadingId } from 'marked-gfm-heading-id'
-import { markedHighlight } from 'marked-highlight'
 import fs from 'node:fs/promises'
 import path from 'path'
 import shiki from 'shiki'
 import toc from './docs/toc.json' assert { type: 'json' }
 
-const highlighter = await shiki.getHighlighter({})
+const highlighter = await shiki.getHighlighter({
+  theme: 'dark-plus'
+})
 
-const marked = new Marked(
-  markedHighlight({
-    highlight: (code, lang) => highlighter.codeToHtml(code, { lang })
-  })
-)
+const marked = new Marked()
+
+marked.use({
+  renderer: {
+    code(code, lang) {
+      let filename = ''
+
+      if (code.startsWith('/// file:') || code.startsWith('<!--- file:')) {
+        const newlineIndex = code.indexOf('\n')
+        filename = code.slice(0, newlineIndex).match(/file: (\S+)/)[1]
+        code = code.slice(newlineIndex + 1)
+      }
+
+      const tokens = highlighter.codeToThemedTokens(code, lang)
+      return shiki.renderToHtml(tokens, {
+        fg: highlighter.getForegroundColor('dark-plus'),
+        bg: highlighter.getBackgroundColor('dark-plus'),
+
+        elements: {
+          pre({ className, style, children }) {
+            const pre = `<pre class="not-prose overflow-auto p-4 leading-normal ${
+              filename ? 'rounded-b' : 'rounded'
+            }" style="${style}" tabindex="0">${children}</pre>`
+
+            return filename
+              ? `
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">${filename}</div>
+  ${pre}
+</div>`
+              : pre
+          }
+        }
+      })
+    }
+  }
+})
 
 marked.use(gfmHeadingId())
 

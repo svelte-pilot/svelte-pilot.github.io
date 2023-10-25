@@ -23,6 +23,8 @@
   export let content: string
 </script>
 
-<article class="prose prose-slate prose-pre:overflow-auto max-w-screen-md">
+<article
+  class="prose prose-slate prose-a:text-[#FF3E00] prose-code:before:content-none prose-code:after:content-none prose-code:bg-slate-100 prose-code:inline-block prose-code:rounded prose-code:px-1"
+>
   {@html content}
 </article>
