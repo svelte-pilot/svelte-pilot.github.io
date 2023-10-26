@@ -1,7 +1,9 @@
 name: Build and Publish
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 on:
   push:
@@ -10,11 +12,18 @@ on:
 
 jobs:
   build:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
 
       - name: Install dependencies
         run: npm install
@@ -27,7 +36,11 @@ jobs:
           NOJS: 1
         run: npm run build:ssg
 
-      - name: Publish dist folder
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          folder: dist
+          path: 'dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
