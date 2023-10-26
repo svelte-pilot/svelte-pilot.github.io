@@ -1,6 +1,6 @@
 # Template
 
-A template based on the [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) routing library, offering server-side rendering (SSR) and other rich features.
+A [template](https://github.com/svelte-pilot/svelte-pilot-template) based on the [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) routing library, offering server-side rendering (SSR) and other rich features.
 
 ## Core Features
 - **Multiple Deployment Modes**: Supports SSR (Server-Side Rendering), SSG (Static Site Generation), SPA (Single Page Application), and serverless functions.

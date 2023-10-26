@@ -1,6 +1,6 @@
 # 模板
 
-基于 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 路由库的模板，提供了服务端渲染（SSR）和其他丰富功能。
+基于 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 路由库的[模板](https://github.com/svelte-pilot/svelte-pilot-template)，提供了服务端渲染（SSR）和其他丰富功能。
 
 ## 核心特性
 - **多种部署模式**：无论是 SSR（服务端渲染）、SSG（静态站点生成）、SPA（单页应用程序），还是无服务器函数，应有尽有。
