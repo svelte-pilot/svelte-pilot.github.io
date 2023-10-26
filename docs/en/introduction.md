@@ -11,6 +11,6 @@ Svelte Pilot is a lightweight, flexible, and feature-rich router.
 - **Architecture Agnostic** - Svelte Pilot is just a library, not imposing any restrictions on specific project structures or build processes, offering developers great freedom.
 - **Lightweight** - With only about 1000 lines of code, it is approximately 5KB after gzip compression.
 
-[Start Learning Now](creating-a-project)
+[Start Learning Now](/en/creating-a-project)
 
-After completing this tutorial, you can use the pre-made [template](template) to create your project.
+After completing this tutorial, you can use the pre-made [template](/en/template) to create your project.

@@ -57,7 +57,7 @@
 </script>
 
 <svelte:head>
-  <title>{headings[0].text}</title>
+  <title>{slug === 'introduction' ? 'Svelte Pilot' : headings[0].text}</title>
 </svelte:head>
 
 <a class="sr-only" href="#{headings[0].id}">{messages.skip_to_content}</a>
