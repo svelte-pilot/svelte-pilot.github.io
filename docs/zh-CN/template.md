@@ -1,17 +1,17 @@
 # 模板
 
-基于 [Svelte Pilot](https://github.com/jiangfengming/svelte-pilot) 路由库的模板，提供了服务端渲染（SSR）和其他丰富功能。
+基于 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 路由库的模板，提供了服务端渲染（SSR）和其他丰富功能。
 
 ## 核心特性
 - **多种部署模式**：无论是 SSR（服务端渲染）、SSG（静态站点生成）、SPA（单页应用程序），还是无服务器函数，应有尽有。
-- **强大的路由和布局系统**：由 [Svelte Pilot](https://github.com/jiangfengming/svelte-pilot) 提供支持。
+- **强大的路由和布局系统**：由 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 提供支持。
 - **集成 TypeScript**：以实现类型安全和稳健的编码。
 - **集成 PostCSS 和 Tailwind CSS**：无需配置开箱即用。
 - **方便的图片导入**：`<img src="./img.png">` 标签直接使用图片，无需手写 `import`。
 - **增强 CSS 隔离**：通过 [svelte-preprocess-css-hash](https://github.com/jiangfengming/svelte-preprocess-css-hash)，`<Child class="--child">` 变为 `<Child class="--child-HaShEd">`。
 
 ## 快速预览
-在 [StackBlitz 在线 IDE](https://stackblitz.com/~/github.com/jiangfengming/svelte-pilot-template?startScript=dev:ssr) 上体验可编辑的演示。
+在 [StackBlitz 在线 IDE](https://stackblitz.com/~/github.com/svelte-pilot/svelte-pilot-template?startScript=dev:ssr) 上体验可编辑的演示。
 
 ## 创建项目
 

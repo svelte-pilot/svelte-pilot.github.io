@@ -131,7 +131,7 @@
 
     <div class="mt-5 text-slate-600">
       <a
-        href="https://github.com/jiangfengming/svelte-pilot-docs/edit/main/docs/{lang}/{slug}.md"
+        href="https://github.com/svelte-pilot/svelte-pilot.github.io/edit/main/docs/{lang}/{slug}.md"
         >{messages.edit_this_page}</a
       >
     </div>

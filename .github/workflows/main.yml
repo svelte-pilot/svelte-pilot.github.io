@@ -1,0 +1,30 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Convert Markdown to HTML
+        run: npm run md2html
+
+      - name: Generate static site
+        env:
+          NOJS: 1
+        run: npm run build:ssg
+
+      - name: Publish dist folder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist

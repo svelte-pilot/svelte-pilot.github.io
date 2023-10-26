@@ -180,7 +180,7 @@ export default defineConfig({
 
 Now, run `node ssr-dev-server.js` in the command line to start the HTTP service for the development environment and visit `http://localhost:5173` to see the effect.
 
-We can observe the existence of a [FOUC (Flash of Unstyled Content)](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) issue. In production mode, for projects that use Tailwind CSS, this can be resolved by setting the Vite configuration option `build.cssCodeSplit` to `true`. If your CSS is too large and needs to be loaded on demand, you can read the Vite compiled [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) file, and then insert the CSS files required for the current page into the HTML during server-side rendering. A specific implementation can be referred to in the [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) project.
+We can observe the existence of a [FOUC (Flash of Unstyled Content)](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) issue. In production mode, for projects that use Tailwind CSS, this can be resolved by setting the Vite configuration option `build.cssCodeSplit` to `true`. If your CSS is too large and needs to be loaded on demand, you can read the Vite compiled [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) file, and then insert the CSS files required for the current page into the HTML during server-side rendering. A specific implementation can be referred to in the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project.
 
 ## Server Entry Point
 
@@ -268,7 +268,7 @@ The `load` function is called during server-side rendering, and the returned dat
 The `load` function accepts three parameters:
 - `props`: The `props` object of the view component.
 - `route`: The current [route object](router#route).
-- `context`: A custom context object. Passed as the second parameter when calling [router.handleServer()](router#routerhandleserver). You can store information like `headers`, `cookies`, etc., of the current request in the `context` object and also set the response’s `statusCode`, `statusMessage`, `headers`, etc. The specific implementation can be referred to in the [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) project, details of which are not reiterated here.
+- `context`: A custom context object. Passed as the second parameter when calling [router.handleServer()](router#routerhandleserver). You can store information like `headers`, `cookies`, etc., of the current request in the `context` object and also set the response’s `statusCode`, `statusMessage`, `headers`, etc. The specific implementation can be referred to in the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project, details of which are not reiterated here.
 
 ### Client-Side Calling the load Function
 
@@ -314,4 +314,4 @@ load.callOnClient = true
 load.cacheKey = ['id']
 ```
 
-By this point, you should have a basic understanding of implementing server-side rendering using Svelte Pilot. If you need to deploy on a serverless platform or generate a static website (Static-Site Generation), it can be achieved with minor modifications. You can directly use or refer to the [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) project.
+By this point, you should have a basic understanding of implementing server-side rendering using Svelte Pilot. If you need to deploy on a serverless platform or generate a static website (Static-Site Generation), it can be achieved with minor modifications. You can directly use or refer to the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project.

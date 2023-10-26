@@ -180,7 +180,7 @@ export default defineConfig({
 
 现在，我们可以在命令行中运行 `node ssr-dev-server.js` 来启动开发环境 HTTP 服务，然后访问 `http://localhost:5173` 来查看效果。
 
-我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题。在生产模式下，对于使用了 Tailwind CSS 的项目，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `true` 来解决。如果你的 CSS 太大，需要按需加载，可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) 项目。
+我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题。在生产模式下，对于使用了 Tailwind CSS 的项目，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `true` 来解决。如果你的 CSS 太大，需要按需加载，可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目。
 
 ## 服务端入口
 
@@ -268,7 +268,7 @@ npm i sirv
 `load` 函数接受三个参数：
 - `props`：视图组件的 `props` 对象。
 - `route`：当前[路由对象](router#route)。
-- `context`: 自定义上下文对象。在调用 [router.handleServer()](router#routerhandleserver) 时作为第二个参数传入。你可以通过 `context` 对象储存当前请求的 `headers`、`cookies` 等信息，还可以实现设置响应的 `statusCode`、`statusMessage`、`headers` 等功能。具体实现可以参考 [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) 项目，这里不再赘述。
+- `context`: 自定义上下文对象。在调用 [router.handleServer()](router#routerhandleserver) 时作为第二个参数传入。你可以通过 `context` 对象储存当前请求的 `headers`、`cookies` 等信息，还可以实现设置响应的 `statusCode`、`statusMessage`、`headers` 等功能。具体实现可以参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目，这里不再赘述。
 
 ### 客户端调用 load 函数
 当我们在客户端使用 HTML5 History API 进行路由跳转时，视图组件的 `load` 函数默认不会被调用，这会导致客户端渲染时缺少数据。我们有三种解决办法：
@@ -313,4 +313,4 @@ load.callOnClient = true
 load.cacheKey = ['id']
 ```
 
-看到这里，相信你已经了解了使用 Svelte Pilot 实现服务端渲染的基本流程。如果你需要在无服务（Serverless）平台上部署，或者生成静态网站（Static-Site Generation），只需稍加改造就可以实现。您可以直接使用或参考 [svelte-pilot-template](https://github.com/jiangfengming/svelte-pilot-template) 项目。
+看到这里，相信你已经了解了使用 Svelte Pilot 实现服务端渲染的基本流程。如果你需要在无服务（Serverless）平台上部署，或者生成静态网站（Static-Site Generation），只需稍加改造就可以实现。您可以直接使用或参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目。
