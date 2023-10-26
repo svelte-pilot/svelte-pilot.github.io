@@ -60,7 +60,7 @@
   <title>{headings[0].text}</title>
 </svelte:head>
 
-<a class="sr-only" href="#{headings[0].id}">{headings[0].text}</a>
+<a class="sr-only" href="#{headings[0].id}">{messages.skip_to_content}</a>
 
 <div class="flex md:w-fit md:mx-auto">
   <nav
@@ -72,6 +72,7 @@
       <Link
         to="/"
         class="text-xl py-4 flex items-center border-b border-b-slate-300"
+        aria-hidden
       >
         <img src="../favicon.svg" alt="logo" width="32" height="32" />
         <span class="tracking-wide ml-2 text-slate-800">Svelte Pilot</span>
@@ -128,6 +129,13 @@
 
     <View />
 
+    <div class="mt-5 text-slate-600">
+      <a
+        href="https://github.com/jiangfengming/svelte-pilot-docs/edit/main/docs/{lang}/{slug}.md"
+        >{messages.edit_this_page}</a
+      >
+    </div>
+
     <div class="flex justify-between border-t border-t-slate-300 mt-6 py-3">
       <div>
         {#if prevSection}
@@ -149,7 +157,9 @@
 
   <aside class="sr-only xl:not-sr-only xl:w-64 xl:px-8 xl:shrink-0">
     <div class="sticky top-0">
-      <h2 class="font-semibold text-slate-500 tracking-widest uppercase py-4">
+      <h2
+        class="font-semibold text-slate-500 tracking-widest uppercase pt-8 pb-4"
+      >
         {messages.on_this_page}
       </h2>
 
