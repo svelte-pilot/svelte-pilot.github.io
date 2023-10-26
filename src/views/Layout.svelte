@@ -124,6 +124,11 @@
         {:else}
           <Link to="/en/{slug}" class="text-[#FF3E00]">English</Link>
         {/if}
+        |
+        <a
+          href="https://github.com/svelte-pilot/svelte-pilot"
+          class="text-[#FF3E00]">GitHub</a
+        >
       </div>
     </div>
 
