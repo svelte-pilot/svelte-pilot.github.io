@@ -1,0 +1,375 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-01739711.svg" />
+    
+    
+    
+    <link rel="stylesheet" href="/assets/style-f855e479.css">
+  <title>Routing</title></head>
+  <body> <a class="sr-only" href="#routing">Skip to content</a> <div class="flex md:w-fit md:mx-auto"><nav id="toc" tabindex="-1" class="bg-slate-100 sr-only focus-within:not-sr-only focus-within:fixed focus-within:top-0 focus-within:left-0 focus-within:h-screen focus-within:w-64 focus-within:px-8 lg:not-sr-only lg:h-screen lg:w-64 lg:px-8 lg:!sticky lg:top-0 lg:left-0 lg:shrink-0 lg:shadow-[-99999px_0_0_99999px] lg:shadow-slate-100"><div class="sticky top-0"><a href="/" class="text-xl py-4 flex items-center border-b border-b-slate-300 " aria-hidden><img src="/assets/favicon-01739711.svg" alt="logo" width="32" height="32"> <span class="tracking-wide ml-2 text-slate-800" data-svelte-h="svelte-1hbur4j">Svelte Pilot</span></a> <ul class="py-4"><li class="mb-4"><span class="font-semibold text-slate-500 tracking-wider uppercase">Guide</span> <ul><li class="my-2"><a href="/en/introduction" class="text-slate-700 ">Introduction</a> </li><li class="my-2"><a href="/en/creating-a-project" class="text-slate-700 ">Creating a Project</a> </li><li class="my-2"><a href="/en/routing" class="text-slate-700 font-semibold !text-[#FF3E00]">Routing</a> </li><li class="my-2"><a href="/en/ssr" class="text-slate-700 ">Server-Side Rendering</a> </li><li class="my-2"><a href="/en/template" class="text-slate-700 ">Template</a> </li></ul> </li><li class="mb-4"><span class="font-semibold text-slate-500 tracking-wider uppercase">Components</span> <ul><li class="my-2"><a href="/en/link" class="text-slate-700 ">&lt;Link></a> </li><li class="my-2"><a href="/en/client-app" class="text-slate-700 ">&lt;ClientApp></a> </li><li class="my-2"><a href="/en/server-app" class="text-slate-700 ">&lt;ServerApp></a> </li></ul> </li><li class="mb-4"><span class="font-semibold text-slate-500 tracking-wider uppercase">API</span> <ul><li class="my-2"><a href="/en/router" class="text-slate-700 ">Router</a> </li></ul> </li></ul></div></nav> <main class="max-w-3xl min-w-0 p-4 sm:p-6 md:p-8"><div class="mb-4 flex justify-between"><div data-svelte-h="svelte-1y34zl4"><a href="#toc" aria-hidden class="lg:hidden"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg></a></div> <div><a href="/zh-CN/routing" class="text-[#FF3E00] ">中文</a></div></div>    <article class="prose prose-slate max-w-none prose-a:text-[#FF3E00] prose-code:before:content-none prose-code:after:content-none prose-code:bg-slate-100 prose-code:inline-block prose-code:rounded prose-code:px-1"><!-- HTML_TAG_START --><h1 id="routing">Routing</h1>
+<p>In the <a href="creating-a-project">Creating a New Project</a> chapter, we can see that the route entries are defined within the <code>routes</code> configuration item when instantiating the <code>Router</code>. Each route entry contains two properties: <code>path</code> and <code>component</code>. Here, <code>path</code> is the route path, and <code>component</code> is the corresponding component for the route. Here’s an example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">Home</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">About</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">component:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">Home</span></span>
+<span class="line"><span style="color: #D4D4D4">    },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">component:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">About</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In the example above, we defined two route entries corresponding to the paths <code>/</code> and <code>/about</code>. When we navigate to <code>/</code>, the <code>&lt;Home&gt;</code> component is rendered on the page; navigating to <code>/about</code> renders the <code>&lt;About&gt;</code> component.</p>
+<h2 id="dynamic-import">Dynamic Import</h2>
+<p>In the initial example, we directly passed the class of the component into the route entry. However, this approach results in all components being bundled into a single file. Users will download components they aren&#39;t accessing, leading to resource wastage and prolonged initial loading times. To mitigate these issues, we can employ dynamic loading for route components. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">    },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this updated example, we’ve replaced the component class with a function. This function returns a <code>Promise</code> that only invokes when a user accesses the route, loading the corresponding component. Each component is packaged into a separate file to enable load-on-demand.</p>
+<h2 id="layouts">Layouts</h2>
+<p>For scenarios where multiple route entries require the same layout, we can configure an entry without a <code>path</code> attribute, referred to as a view. Its <code>component</code> attribute points to the layout component, and route entries utilizing this layout are configured as its children. In fact, route entries with a <code>path</code> attribute are a specialized type of view that maps the URL to the corresponding layout. The entire layout is assembled by traversing the nodes upon matching a route entry. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Layout.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">children:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">        }</span></span>
+<span class="line"><span style="color: #D4D4D4">      ]</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div>
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/Layout.svelte</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">View</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">header</span><span style="color: #808080">&gt;</span><span style="color: #D4D4D4">My Awesome App</span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">header</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #4EC9B0">View</span><span style="color: #D4D4D4"> </span><span style="color: #808080">/&gt;</span></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">footer</span><span style="color: #808080">&gt;</span><span style="color: #D4D4D4">App Footer</span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">footer</span><span style="color: #808080">&gt;</span></span></code></pre>
+</div><p>In the instance above, we defined a <code>&lt;Layout&gt;</code> component that includes a <code>&lt;View&gt;</code> component. The <code>&lt;View&gt;</code> component renders the component specified by the current route entry’s <code>component</code> attribute. Views can be nested to enable more flexible layout reuse.</p>
+<h3 id="named-views">Named Views</h3>
+<p>If we need to render multiple views in a layout, we can assign a <code>name</code> attribute to the view entries, and then use the <code>name</code> attribute of the <code>&lt;View&gt;</code> component in the layout to specify the view to be rendered. For instance:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Layout.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">children:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Ad.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sidebar&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">        }</span></span>
+<span class="line"><span style="color: #D4D4D4">      ]</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div>
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/Layout.svelte</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">View</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">header</span><span style="color: #808080">&gt;</span><span style="color: #D4D4D4">My Awesome App</span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">header</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">div</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">class</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;container&quot;</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;</span><span style="color: #569CD6">aside</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&lt;</span><span style="color: #4EC9B0">View</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">name</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;sidebar&quot;</span><span style="color: #D4D4D4"> </span><span style="color: #808080">/&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">aside</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;</span><span style="color: #569CD6">main</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&lt;</span><span style="color: #4EC9B0">View</span><span style="color: #D4D4D4"> </span><span style="color: #808080">/&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">main</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">div</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">footer</span><span style="color: #808080">&gt;</span><span style="color: #D4D4D4">App Footer</span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">footer</span><span style="color: #808080">&gt;</span></span></code></pre>
+</div><p>In this example, the <code>&lt;Layout&gt;</code> component includes two <code>&lt;View&gt;</code> components; one default view and another named <code>sidebar</code>. Upon accessing <code>/</code> or <code>/about</code>, the router matches the corresponding route entry, retrieving sibling view entries to render the appropriate <code>&lt;View&gt;</code> components based on the <code>name</code> attribute.</p>
+<h3 id="view-override">View Override</h3>
+<p>In the previous examples, if the <code>&lt;About&gt;</code> component requires a different sidebar component, it, along with the required sidebar component, can be defined within a nested array, overriding the default sidebar component. For instance:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Layout.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">children:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Ad.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sidebar&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        [</span></span>
+<span class="line"><span style="color: #D4D4D4">          {</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/AnotherSidebar.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sidebar&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">          },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">          {</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">          }</span></span>
+<span class="line"><span style="color: #D4D4D4">        ]</span></span>
+<span class="line"><span style="color: #D4D4D4">      ]</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><h2 id="component-props">Component Props</h2>
+<p>Parameters can be passed to components by defining the <code>props</code> object in the view configuration. Each attribute of the <code>props</code> object is passed to the component. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user/Alice&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">props:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">user:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;Alice&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div>
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/User.svelte</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">let</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">user</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">h1</span><span style="color: #808080">&gt;</span><span style="color: #D4D4D4">Hello </span><span style="color: #569CD6">{</span><span style="color: #9CDCFE">user</span><span style="color: #569CD6">}</span><span style="color: #D4D4D4">!</span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">h1</span><span style="color: #808080">&gt;</span></span></code></pre>
+</div><p>In this example, we defined a route entry with the path <code>/user/Alice</code>, and included a <code>props</code> object containing a <code>user</code> attribute. When navigating to <code>/user/Alice</code>, the <code>&lt;User&gt;</code> component is rendered, and the <code>user</code> attribute value is passed into the component.</p>
+<h3 id="extracting-parameters-from-paths">Extracting Parameters from Paths</h3>
+<p>We can define parameters in the path using the <code>:parameterName</code> format and then retrieve the parameter values through the <a href="router#params">route.params</a> object. <code>route.params</code> is a <a href="https://github.com/jiangfengming/cast-string#stringcaster">StringCaster</a> object, which contains the parameters extracted from the path. We then define the <code>props</code> attribute as a function, where its parameter is the <a href="router#route">route</a> object, and the return value will serve as the parameters for the component. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user/:name&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">props</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">user:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">string</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">      })</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><h4 id="using-regular-expressions-to-match-path-parameters">Using Regular Expressions to Match Path Parameters</h4>
+<p>If path parameters must conform to a specific format, regular expressions can be employed to match them. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user/:id(</span><span style="color: #D7BA7D">\\</span><span style="color: #CE9178">d+)&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">props</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">id:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">int</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;id&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">      })</span></span>
+<span class="line"><span style="color: #D4D4D4">    },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user/:name&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">props</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">string</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">      })</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this example, two route entries are defined. The <code>id</code> parameter of the first entry must be numeric, while the <code>name</code> parameter of the second can be any string. The router matches route entries based on the order of paths. So, when navigating to <code>/user/123</code>, the first route entry matches, converting the <code>id</code> parameter to an integer type before passing it to the <code>&lt;User&gt;</code> component. Navigating to <code>/user/Alice</code> matches the second entry, converting the <code>name</code> parameter to a string before passing it to the `User” component.</p>
+<p>In fact, path parameters without defined regular expressions are assumed to match <code>[^/]+</code> by default, meaning they can match any character up to the next <code>/</code>.</p>
+<h4 id="unnamed-regular-expression-parameters">Unnamed Regular Expression Parameters</h4>
+<p>If there’s no need to extract the value of a parameter from the path, and the only requirement is to ascertain if the parameter satisfies a specific regular expression, unnamed regular expression parameters can be used. For instance:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #6A9955">// ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;(.*)&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/NotFound.svelte&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In the example above, a route entry with the path <code>(.*)</code> is defined, capable of matching any path. It’s matched when the accessed path doesn’t correspond to any other route entry.</p>
+<h4 id="order-of-route-entry-matching">Order of Route Entry Matching</h4>
+<ol>
+<li>Pure string path route entries take precedence over those containing path parameters. Route entries containing path parameters are only considered when no match is found for those with pure string paths.</li>
+<li>Route entries with longer string prefixes take precedence. For instance, <code>/user/:id</code> takes precedence over <code>(.*)</code> as the router strives to match the longer string path.</li>
+<li>For route entries with equal string prefix lengths, the order of definition is considered. For example, between <code>/user/:id(\\d+)</code> and <code>/user/:name</code>, since both have the <code>/user/</code> prefix, the router matches based on the order of definition.</li>
+</ol>
+<p>Generally, defining route entries from the most specific to the most general helps reduce cognitive load and prevent errors.</p>
+<h3 id="extracting-parameters-from-query-strings">Extracting Parameters from Query Strings</h3>
+<p>Parameters from the query string can be obtained through the <code>route.query</code> object. It’s also a <code>StringCaster</code> object. Here’s an example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">props</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">query</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">string</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">      })</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this example, navigating to <code>/user?name=Alice</code> sets the <code>name</code> attribute to <code>Alice</code>.</p>
+<h3 id="cross-view-parameter-passing">Cross-View Parameter Passing</h3>
+<p>The <code>route.meta</code> object enables cross-view parameter passing. It contains custom data for the current route entry and is a regular object. Here&#39;s an example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Layout.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">props</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">meta</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">title</span></span>
+<span class="line"><span style="color: #D4D4D4">      }),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">children:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/Home.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">meta:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;Home&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">          }</span></span>
+<span class="line"><span style="color: #D4D4D4">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #D4D4D4">        {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/about&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/About.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #9CDCFE">meta:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">            </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;About&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">          }</span></span>
+<span class="line"><span style="color: #D4D4D4">        }</span></span>
+<span class="line"><span style="color: #D4D4D4">      ]</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this example, the <code>meta</code> object defined in the route entry can be passed to other view components via <code>route.meta</code>. The <code>meta</code> attribute can be an object or a function. If it’s a function, it accepts a <code>route</code> object as a parameter and returns an object. The <code>meta</code> objects of the entire view tree are merged, with attributes of child views overriding those of parent views.</p>
+<h2 id="key">Key</h2>
+<p>The <code>key</code> attribute can be defined to control whether a component should be destroyed and recreated. The <code>key</code> attribute is a function that accepts a <code>route</code> object and returns a primitive type (typically a string or number). If the returned value changes, the component is destroyed and recreated. For example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user/:id&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">key</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">route</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">int</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;id&#39;</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this example, navigating from <code>/user/123</code> to <code>/user/456</code> results in the destruction and recreation of the <code>&lt;User&gt;</code> component. If the <code>key</code> attribute isn’t defined, the component is reused.</p>
+<h2 id="route-guards">Route Guards</h2>
+<h3 id="beforeenter">beforeEnter</h3>
+<p>The <code>beforeEnter</code> attribute can be defined in the view configuration to set up a route guard before entering the route. The <code>beforeEnter</code> attribute is a function that receives two parameters, <code>from</code> and <code>to</code>, both of which are <code>Route</code> objects. If the function returns <code>true</code> or <code>undefined</code>, the route transition continues. If it returns <code>false</code>, the transition is interrupted. If it returns a string or <a href="router#location">Location</a> object, a redirection occurs. If a <code>Promise</code> is returned, it’s processed based on its resolved value. When multiple <code>beforeEnter</code> functions exist in the view tree, they’re invoked in parent-to-child order. If any function returns <code>false</code> or a redirection path, subsequent functions aren’t invoked. Here’s an example:</p>
+
+<div class="my-5">
+  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">src/router.js</div>
+  <pre class="not-prose overflow-auto p-4 leading-normal rounded-b" style="background-color: #1E1E1E" tabindex="0"><code><span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">Router</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;svelte-pilot&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">auth</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;./auth&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C586C0">export</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">default</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">Router</span><span style="color: #D4D4D4">({</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">routes:</span><span style="color: #D4D4D4"> [</span></span>
+<span class="line"><span style="color: #D4D4D4">    {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">path:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/user&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">component</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">import</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;./views/User.svelte&#39;</span><span style="color: #D4D4D4">),</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">beforeEnter</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #C586C0">if</span><span style="color: #D4D4D4"> (!</span><span style="color: #9CDCFE">auth</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">loggedIn</span><span style="color: #D4D4D4">) {</span></span>
+<span class="line"><span style="color: #D4D4D4">          </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;/login&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">        }</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  ]</span></span>
+<span class="line"><span style="color: #D4D4D4">})</span></span></code></pre>
+</div><p>In this example, a route entry with the path <code>/user</code> is defined. When navigating to <code>/user</code>, the <code>beforeEnter</code> function is invoked. If the user is logged in, the route transition continues. If not, a redirection to `/login” occurs.</p>
+<h3 id="beforeleave">beforeLeave</h3>
+<p>The <code>beforeLeave</code> attribute can be defined in the view configuration to set up a route guard before leaving the current route. Its usage is similar to <code>beforeEnter</code>.</p>
+<!-- HTML_TAG_END --></article> <div class="mt-5 text-slate-600"><a href="https://github.com/svelte-pilot/svelte-pilot.github.io/edit/main/docs/en/routing.md">Edit this page on GitHub</a></div> <div class="flex justify-between border-t border-t-slate-300 mt-6 py-3"><div><a href="/en/creating-a-project" class="text-[#FF3E00] ">← Creating a Project</a></div> <div><a href="/en/ssr" class="text-[#FF3E00] ">Server-Side Rendering →</a></div></div></main> <aside class="sr-only xl:not-sr-only xl:w-64 xl:px-8 xl:shrink-0"><div class="sticky top-0"><h2 class="font-semibold text-slate-500 tracking-widest uppercase pt-8 pb-4">On this page</h2> <ul><li class="my-2"><a href="#routing" class="text-slate-800">Routing</a> </li><li class="my-2"><a href="#dynamic-import" class="text-slate-800">Dynamic Import</a> </li><li class="my-2"><a href="#layouts" class="text-slate-800">Layouts</a> </li><li class="my-2"><a href="#component-props" class="text-slate-800">Component Props</a> </li><li class="my-2"><a href="#key" class="text-slate-800">Key</a> </li><li class="my-2"><a href="#route-guards" class="text-slate-800">Route Guards</a> </li></ul></div></aside></div></body>
+</html>
