@@ -7,7 +7,7 @@
 - **强大的路由和布局系统**：由 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 提供支持。
 - **集成 TypeScript**：以实现类型安全和稳健的编码。
 - **集成 PostCSS 和 Tailwind CSS**：无需配置开箱即用。
-- **方便的图片导入**：`<img src="./img.png">` 标签直接使用图片，无需手写 `import`。
+- **方便的图片导入**：通过 [svelte-preprocess-import-assets](https://github.com/bluwy/svelte-preprocess-import-assets)，`<img src="./img.png">` 标签直接导入图片，无需手写 `import`。
 - **增强 CSS 隔离**：通过 [svelte-preprocess-css-hash](https://github.com/jiangfengming/svelte-preprocess-css-hash)，`<Child class="--child">` 变为 `<Child class="--child-HaShEd">`。
 
 ## 快速预览
