@@ -11,7 +11,8 @@ export default new Router({
       component: () => import('./views/Layout.svelte'),
       props: route => ({
         lang: route.meta.lang,
-        slug: route.meta.slug
+        slug: route.meta.slug,
+        home: Boolean(route.meta.home)
       }),
       children: [
         {
@@ -32,7 +33,8 @@ export default new Router({
           component: () => import('./views/Doc.svelte'),
           meta: {
             lang: 'en',
-            slug: 'introduction'
+            slug: 'introduction',
+            home: true
           },
           props: {
             lang: 'en',

@@ -20,6 +20,7 @@
   export let slug: string
   export let toc: Toc
   export let messages: Record<string, string>
+  export let home = false
 
   type Heading = { id: string; text: string; level: number }
 
@@ -71,7 +72,8 @@
     <div class="sticky top-0">
       <Link
         to="/"
-        class="text-xl py-4 flex items-center border-b border-b-slate-300"
+        class="text-xl py-4 flex items-center border-b border-b-slate-300 font-semibold"
+        activeClass=""
         aria-hidden
       >
         <img src="../favicon.svg" alt="logo" width="32" height="32" />
@@ -89,7 +91,10 @@
                 <li class="my-2">
                   <Link
                     to="/{lang}/{section.file}"
-                    class="text-slate-700"
+                    class="text-slate-700 {home &&
+                    section.file === 'introduction'
+                      ? 'font-semibold !text-[#FF3E00]'
+                      : ''}"
                     on:click={blur}>{sectionName}</Link
                   >
                 </li>
