@@ -8,32 +8,36 @@ export default new Router({
 
   routes: [
     {
-      path: '/',
-      component: () => import('./views/index.svelte')
-    },
-
-    {
-      path: `/${langParam}`,
-      component: () => import('./views/index.svelte'),
-      props: route => ({
-        lang: route.params.string('lang')
-      })
-    },
-
-    {
       component: () => import('./views/Layout.svelte'),
       props: route => ({
-        lang: route.params.string('lang'),
-        slug: route.params.string('slug')
+        lang: route.meta.lang,
+        slug: route.meta.slug
       }),
       children: [
         {
           path: `/${langParam}/:slug`,
           component: () => import('./views/Doc.svelte'),
+          meta: route => ({
+            lang: route.params.string('lang'),
+            slug: route.params.string('slug')
+          }),
           props: route => ({
             lang: route.params.string('lang'),
             slug: route.params.string('slug')
           })
+        },
+
+        {
+          path: '/',
+          component: () => import('./views/Doc.svelte'),
+          meta: {
+            lang: 'en',
+            slug: 'introduction'
+          },
+          props: {
+            lang: 'en',
+            slug: 'introduction'
+          }
         }
       ]
     },

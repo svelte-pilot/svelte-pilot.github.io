@@ -21,20 +21,53 @@
   export let toc: Toc
   export let messages: Record<string, string>
 
-  $: headings =
-    Object.values(toc)
+  type Heading = { id: string; text: string; level: number }
+
+  type Section = {
+    file: string
+    headings: Heading[]
+  }
+
+  let headings: Heading[]
+  let prevSection: Section | undefined
+  let nextSection: Section | undefined
+
+  $: {
+    const sections = Object.values(toc)
       .map(item => Object.values(item))
       .flat()
-      .find(item => item.file === slug)
-      ?.headings.filter(h => h.level <= 2) || []
+
+    const currentSectionIndex = sections.findIndex(item => item.file === slug)
+
+    headings =
+      sections[currentSectionIndex].headings.filter(h => h.level <= 2) || []
+
+    prevSection =
+      currentSectionIndex === 0 ? undefined : sections[currentSectionIndex - 1]
+
+    nextSection =
+      currentSectionIndex === sections.length - 1
+        ? undefined
+        : sections[currentSectionIndex + 1]
+  }
+
+  function blur() {
+    ;(document.activeElement as HTMLElement)?.blur()
+  }
 </script>
 
 <svelte:head>
   <title>{headings[0].text}</title>
 </svelte:head>
 
-<div class="flex w-fit mx-auto">
-  <nav class="fixed hidden w-64 shrink-0 px-8 bg-slate-100">
+<a class="sr-only" href="#{headings[0].id}">{headings[0].text}</a>
+
+<div class="flex md:w-fit md:mx-auto">
+  <nav
+    id="toc"
+    tabindex="-1"
+    class="bg-slate-100 sr-only focus-within:not-sr-only focus-within:fixed focus-within:top-0 focus-within:left-0 focus-within:h-screen focus-within:w-64 focus-within:px-8 lg:not-sr-only lg:h-screen lg:w-64 lg:px-8 lg:!sticky lg:top-0 lg:left-0 lg:shrink-0 lg:shadow-[-99999px_0_0_99999px] lg:shadow-slate-100"
+  >
     <div class="sticky top-0">
       <Link
         to="/"
@@ -53,8 +86,10 @@
             <ul>
               {#each Object.entries(sections) as [sectionName, section]}
                 <li class="my-2">
-                  <Link to="/{lang}/{section.file}" class="text-slate-700"
-                    >{sectionName}</Link
+                  <Link
+                    to="/{lang}/{section.file}"
+                    class="text-slate-700"
+                    on:click={blur}>{sectionName}</Link
                   >
                 </li>
               {/each}
@@ -65,19 +100,54 @@
     </div>
   </nav>
 
-  <main class="max-w-[100vw] w-[768px] p-4 sm:p-6 md:p-8">
-    <div class="text-right mb-4">
-      {#if lang === 'en'}
-        <Link to="/zh-CN/{slug}" class="text-slate-800">中文</Link>
-      {:else}
-        <Link to="/en/{slug}" class="text-slate-800">English</Link>
-      {/if}
+  <main class="max-w-3xl min-w-0 p-4 sm:p-6 md:p-8">
+    <div class="mb-4 flex justify-between">
+      <div>
+        <a href="#toc" aria-hidden class="lg:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div>
+        {#if lang === 'en'}
+          <Link to="/zh-CN/{slug}" class="text-[#FF3E00]">中文</Link>
+        {:else}
+          <Link to="/en/{slug}" class="text-[#FF3E00]">English</Link>
+        {/if}
+      </div>
     </div>
 
     <View />
+
+    <div class="flex justify-between border-t border-t-slate-300 mt-6 py-3">
+      <div>
+        {#if prevSection}
+          <Link to="/{lang}/{prevSection.file}" class="text-[#FF3E00]">
+            &larr; {prevSection.headings[0].text}
+          </Link>
+        {/if}
+      </div>
+
+      <div>
+        {#if nextSection}
+          <Link to="/{lang}/{nextSection.file}" class="text-[#FF3E00]">
+            {nextSection.headings[0].text} &rarr;
+          </Link>
+        {/if}
+      </div>
+    </div>
   </main>
 
-  <aside class="hidden w-64 px-8 shrink-0">
+  <aside class="sr-only xl:not-sr-only xl:w-64 xl:px-8 xl:shrink-0">
     <div class="sticky top-0">
       <h2 class="font-semibold text-slate-500 tracking-widest uppercase py-4">
         {messages.on_this_page}

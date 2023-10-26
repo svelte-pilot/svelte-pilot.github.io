@@ -47,4 +47,4 @@ router.start(
 )
 ```
 
-At this point, we have completed a simplest Svelte application and successfully integrated Svelte Pilot. Next, we will introduce how to use Svelte Pilot to implement routing features.
+At this point, we have completed a simplest Svelte application and successfully integrated Svelte Pilot. Next, we will introduce how to configure routing and layout using Svelte Pilot.

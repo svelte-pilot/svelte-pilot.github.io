@@ -25,7 +25,7 @@ export default new Router({
 
 In the example above, we defined two route entries corresponding to the paths `/` and `/about`. When we navigate to `/`, the `<Home>` component is rendered on the page; navigating to `/about` renders the `<About>` component.
 
-## Dynamic Loading of Route Components
+## Dynamic Import
 
 In the initial example, we directly passed the class of the component into the route entry. However, this approach results in all components being bundled into a single file. Users will download components they aren't accessing, leading to resource wastage and prolonged initial loading times. To mitigate these issues, we can employ dynamic loading for route components. For example:
 
@@ -187,7 +187,7 @@ export default new Router({
 })
 ```
 
-## Component Parameter Passing
+## Component Props
 
 Parameters can be passed to components by defining the `props` object in the view configuration. Each attribute of the `props` object is passed to the component. For example:
 

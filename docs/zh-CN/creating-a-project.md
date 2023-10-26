@@ -47,4 +47,4 @@ router.start(
 )
 ```
 
-至此，我们已经完成了一个最简单的 Svelte 应用并成功接入了 Svelte Pilot。接下来，我们将介绍如何使用 Svelte Pilot 来实现路由功能。
+至此，我们已经完成了一个最简单的 Svelte 应用并成功接入了 Svelte Pilot。接下来，我们将介绍如何使用 Svelte Pilot 来配置路由和布局。

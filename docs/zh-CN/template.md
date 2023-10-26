@@ -43,7 +43,7 @@ PORT=8080 npm run dev:ssr # 指定端口
 ```sh
 npm run build:spa        # 构建 SPA 站点
 npm run build:ssr        # node.js SSR 服务器
-npm run build:ssg        # 生成静态站点。在 `package.json` 的 `ssg` 字段中配置 URLs。
+npm run build:ssg        # 生成静态站点。在 `package.json` 的 `ssg` 字段中配置 URL。
 NOJS=1 npm run build:ssg # 无 JS 生成静态站点
 npm run build:cloudflare # Cloudflare Pages
 
