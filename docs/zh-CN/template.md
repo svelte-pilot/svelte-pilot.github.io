@@ -30,7 +30,7 @@ npm init svelte-pilot
 npm i
 ```
 
-## 启动开发环境
+## 开发
 
 ```sh
 npm run dev:spa           # 以 SPA 模式开发
