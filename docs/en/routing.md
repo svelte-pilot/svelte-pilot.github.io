@@ -1,6 +1,6 @@
 # Routing
 
-In the [Creating a New Project](creating-a-project) chapter, we can see that the route entries are defined within the `routes` configuration item when instantiating the `Router`. Each route entry contains two properties: `path` and `component`. Here, `path` is the route path, and `component` is the corresponding component for the route. Here’s an example:
+In the [Creating a New Project](creating-a-project) section, we can see that the route entries are defined within the `routes` configuration item when instantiating the `Router`. Each route entry contains two properties: `path` and `component`. Here, `path` is the route path, and `component` is the corresponding component for the route. Here’s an example:
 
 ```js
 /// file: src/router.js

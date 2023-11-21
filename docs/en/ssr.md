@@ -1,6 +1,6 @@
 # Server-Side Rendering
 
-In this chapter, based on the project created in the [Creating a Project](creating-a-project) chapter, we will introduce how to implement server-side rendering using Svelte Pilot.
+In this section, based on the project created in the [Creating a Project](creating-a-project) section, we will introduce how to implement server-side rendering using Svelte Pilot.
 
 ## Code Structure
 
