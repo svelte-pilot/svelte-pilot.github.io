@@ -51,6 +51,7 @@ marked.use({
 marked.use(gfmHeadingId())
 
 const files = await fs.readdir('docs', { withFileTypes: true })
+const urls = ['/']
 
 for (const file of files) {
   if (file.isDirectory()) {
@@ -68,6 +69,7 @@ for (const file of files) {
       const chapter = (_toc[messages[chapterId]] = {})
 
       for (const file of files) {
+        urls.push(`/${lang}/${file}`)
         const content = await fs.readFile(
           path.join('docs', lang, file + '.md'),
           'utf-8'
@@ -88,3 +90,5 @@ for (const file of files) {
     )
   }
 }
+
+await fs.writeFile('ssg.json', JSON.stringify(urls, null, 2))
