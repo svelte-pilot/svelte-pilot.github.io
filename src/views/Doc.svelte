@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import type { LoadFunction } from 'svelte-pilot'
-  import type { Context } from '../context/types'
+  import type { Context } from '../context'
   import docs from '../docs'
 
   export const load: LoadFunction<
