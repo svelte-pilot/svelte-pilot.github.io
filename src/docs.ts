@@ -1,1 +1,4 @@
-export default import.meta.glob('../.html/**/*.html', { as: 'raw' })
+export default import.meta.glob('../.html/**/*.html', {
+  query: '?raw',
+  import: 'default'
+})
