@@ -412,7 +412,7 @@ export default new Router({
 })
 ```
 
-In this example, a route entry with the path `/user` is defined. When navigating to `/user`, the `beforeEnter` function is invoked. If the user is logged in, the route transition continues. If not, a redirection to `/login” occurs.
+In this example, a route entry with the path `/user` is defined. When navigating to `/user`, the `beforeEnter` function is invoked. If the user is logged in, the route transition continues. If not, a redirection to `/login` occurs.
 
 ### beforeLeave
 
