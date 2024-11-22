@@ -3,21 +3,22 @@
 In the [Creating a New Project](creating-a-project) section, we can see that the route entries are defined within the `routes` configuration item when instantiating the `Router`. Each route entry contains two properties: `path` and `component`. Here, `path` is the route path, and `component` is the corresponding component for the route. Here’s an example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
-import Home from './views/Home.svelte'
+
 import About from './views/About.svelte'
+import Home from './views/Home.svelte'
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      component: Home
+      component: Home,
+      path: '/'
     },
 
     {
-      path: '/about',
-      component: About
+      component: About,
+      path: '/about'
     }
   ]
 })
@@ -30,19 +31,19 @@ In the example above, we defined two route entries corresponding to the paths `/
 In the initial example, we directly passed the class of the component into the route entry. However, this approach results in all components being bundled into a single file. Users will download components they aren't accessing, leading to resource wastage and prolonged initial loading times. To mitigate these issues, we can employ dynamic loading for route components. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      component: () => import('./views/Home.svelte')
+      component: () => import('./views/Home.svelte'),
+      path: '/'
     },
 
     {
-      path: '/about',
-      component: () => import('./views/About.svelte')
+      component: () => import('./views/About.svelte'),
+      path: '/about'
     }
   ]
 })
@@ -55,31 +56,31 @@ In this updated example, we’ve replaced the component class with a function. T
 For scenarios where multiple route entries require the same layout, we can configure an entry without a `path` attribute, referred to as a view. Its `component` attribute points to the layout component, and route entries utilizing this layout are configured as its children. In fact, route entries with a `path` attribute are a specialized type of view that maps the URL to the corresponding layout. The entire layout is assembled by traversing the nodes upon matching a route entry. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      component: () => import('./views/Layout.svelte'),
       children: [
         {
-          path: '/',
-          component: () => import('./views/Home.svelte')
+          component: () => import('./views/Home.svelte'),
+          path: '/'
         },
 
         {
-          path: '/about',
-          component: () => import('./views/About.svelte')
+          component: () => import('./views/About.svelte'),
+          path: '/about'
         }
-      ]
+      ],
+      component: () => import('./views/Layout.svelte')
     }
   ]
 })
 ```
 
 ```svelte
-<!--- file: src/Layout.svelte --->
+<!-- file: src/Layout.svelte -->
 <script>
   import { View } from 'svelte-pilot'
 </script>
@@ -96,13 +97,12 @@ In the instance above, we defined a `<Layout>` component that includes a `<View>
 If we need to render multiple views in a layout, we can assign a `name` attribute to the view entries, and then use the `name` attribute of the `<View>` component in the layout to specify the view to be rendered. For instance:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      component: () => import('./views/Layout.svelte'),
       children: [
         {
           component: () => import('./views/Ad.svelte'),
@@ -110,31 +110,32 @@ export default new Router({
         },
 
         {
-          path: '/',
           component: () => import('./views/Home.svelte'),
+          path: '/',
         },
 
         {
-          path: '/about',
           component: () => import('./views/About.svelte'),
+          path: '/about',
         }
-      ]
+      ],
+      component: () => import('./views/Layout.svelte')
     }
   ]
 })
 ```
 
 ```svelte
-<!--- file: src/Layout.svelte --->
+<!-- file: src/Layout.svelte -->
 <script>
   import { View } from 'svelte-pilot'
 </script>
 
 <header>My Awesome App</header>
 
-<div class="container">
+<div class='container'>
   <aside>
-    <View name="sidebar" />
+    <View name='sidebar' />
   </aside>
 
   <main>
@@ -152,13 +153,12 @@ In this example, the `<Layout>` component includes two `<View>` components; one 
 In the previous examples, if the `<About>` component requires a different sidebar component, it, along with the required sidebar component, can be defined within a nested array, overriding the default sidebar component. For instance:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      component: () => import('./views/Layout.svelte'),
       children: [
         {
           component: () => import('./views/Ad.svelte'),
@@ -166,8 +166,8 @@ export default new Router({
         },
 
         {
-          path: '/',
           component: () => import('./views/Home.svelte'),
+          path: '/',
         },
 
         [
@@ -177,11 +177,12 @@ export default new Router({
           },
 
           {
-            path: '/about',
             component: () => import('./views/About.svelte'),
+            path: '/about',
           }
         ]
-      ]
+      ],
+      component: () => import('./views/Layout.svelte')
     }
   ]
 })
@@ -192,14 +193,14 @@ export default new Router({
 Parameters can be passed to components by defining the `props` object in the view configuration. Each attribute of the `props` object is passed to the component. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/user/Alice',
       component: () => import('./views/User.svelte'),
+      path: '/user/Alice',
       props: {
         user: 'Alice'
       }
@@ -209,9 +210,9 @@ export default new Router({
 ```
 
 ```svelte
-<!--- file: src/User.svelte --->
+<!-- file: src/User.svelte -->
 <script>
-  export let user
+  let { user } = $props()
 </script>
 
 <h1>Hello {user}!</h1>
@@ -224,14 +225,14 @@ In this example, we defined a route entry with the path `/user/Alice`, and inclu
 We can define parameters in the path using the `:parameterName` format and then retrieve the parameter values through the [route.params](router#params) object. `route.params` is a [StringCaster](https://github.com/jiangfengming/cast-string#stringcaster) object, which contains the parameters extracted from the path. We then define the `props` attribute as a function, where its parameter is the [route](router#route) object, and the return value will serve as the parameters for the component. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/user/:name',
       component: () => import('./views/User.svelte'),
+      path: '/user/:name',
       props: route => ({
         user: route.params.string('name')
       })
@@ -245,22 +246,22 @@ export default new Router({
 If path parameters must conform to a specific format, regular expressions can be employed to match them. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/user/:id(\\d+)',
       component: () => import('./views/User.svelte'),
+      path: '/user/:id(\\d+)',
       props: route => ({
         id: route.params.int('id')
       })
     },
 
     {
-      path: '/user/:name',
       component: () => import('./views/User.svelte'),
+      path: '/user/:name',
       props: route => ({
         name: route.params.string('name')
       })
@@ -278,7 +279,7 @@ In fact, path parameters without defined regular expressions are assumed to matc
 If there’s no need to extract the value of a parameter from the path, and the only requirement is to ascertain if the parameter satisfies a specific regular expression, unnamed regular expression parameters can be used. For instance:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
@@ -286,8 +287,8 @@ export default new Router({
     // ...
 
     {
-      path: '(.*)',
-      component: () => import('./views/NotFound.svelte')
+      component: () => import('./views/NotFound.svelte'),
+      path: '(.*)'
     }
   ]
 })
@@ -308,14 +309,14 @@ Generally, defining route entries from the most specific to the most general hel
 Parameters from the query string can be obtained through the `route.query` object. It’s also a `StringCaster` object. Here’s an example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/user',
       component: () => import('./views/User.svelte'),
+      path: '/user',
       props: route => ({
         name: route.query.string('name')
       })
@@ -331,33 +332,33 @@ In this example, navigating to `/user?name=Alice` sets the `name` attribute to `
 The `route.meta` object enables cross-view parameter passing. It contains custom data for the current route entry and is a regular object. Here's an example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      component: () => import('./views/Layout.svelte'),
-      props: route => ({
-        title: route.meta.title
-      }),
       children: [
         {
-          path: '/',
           component: () => import('./views/Home.svelte'),
           meta: {
             title: 'Home'
-          }
+          },
+          path: '/'
         },
 
         {
-          path: '/about',
           component: () => import('./views/About.svelte'),
           meta: {
             title: 'About'
-          }
+          },
+          path: '/about'
         }
-      ]
+      ],
+      component: () => import('./views/Layout.svelte'),
+      props: route => ({
+        title: route.meta.title
+      })
     }
   ]
 })
@@ -370,15 +371,15 @@ In this example, the `meta` object defined in the route entry can be passed to o
 The `key` attribute can be defined to control whether a component should be destroyed and recreated. The `key` attribute is a function that accepts a `route` object and returns a primitive type (typically a string or number). If the returned value changes, the component is destroyed and recreated. For example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/user/:id',
       component: () => import('./views/User.svelte'),
-      key: route => route.params.int('id')
+      key: route => route.params.int('id'),
+      path: '/user/:id'
     }
   ]
 })
@@ -393,20 +394,21 @@ In this example, navigating from `/user/123` to `/user/456` results in the destr
 The `beforeEnter` attribute can be defined in the view configuration to set up a route guard before entering the route. The `beforeEnter` attribute is a function that receives two parameters, `from` and `to`, both of which are `Route` objects. If the function returns `true` or `undefined`, the route transition continues. If it returns `false`, the transition is interrupted. If it returns a string or [Location](router#location) object, a redirection occurs. If a `Promise` is returned, it’s processed based on its resolved value. When multiple `beforeEnter` functions exist in the view tree, they’re invoked in parent-to-child order. If any function returns `false` or a redirection path, subsequent functions aren’t invoked. Here’s an example:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
+
 import auth from './auth'
 
 export default new Router({
   routes: [
     {
-      path: '/user',
-      component: () => import('./views/User.svelte'),
       beforeEnter: () => {
         if (!auth.loggedIn) {
           return '/login'
         }
-      }
+      },
+      component: () => import('./views/User.svelte'),
+      path: '/user'
     }
   ]
 })

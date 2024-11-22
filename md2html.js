@@ -1,51 +1,59 @@
+/* eslint-disable antfu/no-top-level-await */
+import fs from 'node:fs/promises'
+import path from 'node:path'
+// @ts-check
 import { decode } from 'html-entities'
 import { Marked } from 'marked'
 import { getHeadingList, gfmHeadingId } from 'marked-gfm-heading-id'
-import fs from 'node:fs/promises'
-import path from 'path'
-import shiki from 'shiki'
-import toc from './docs/toc.json' assert { type: 'json' }
+import { getSingletonHighlighter } from 'shiki'
 
-const highlighter = await shiki.getHighlighter({
-  theme: 'dark-plus'
+import toc from './docs/toc.json'
+
+const highlighter = await getSingletonHighlighter({
+  langs: ['sh', 'js', 'svelte', 'json'],
+  themes: ['dark-plus'],
 })
 
 const marked = new Marked()
 
 marked.use({
   renderer: {
-    code(code, lang) {
+    code({ lang, text }) {
       let filename = ''
 
-      if (code.startsWith('/// file:') || code.startsWith('<!--- file:')) {
-        const newlineIndex = code.indexOf('\n')
-        filename = code.slice(0, newlineIndex).match(/file: (\S+)/)[1]
-        code = code.slice(newlineIndex + 1)
+      if (text.startsWith('// file:') || text.startsWith('<!-- file:')) {
+        const newlineIndex = text.indexOf('\n')
+        filename = text.slice(0, newlineIndex).match(/file: (\S+)/)?.[1] || ''
+        text = text.slice(newlineIndex + 1)
       }
 
-      const tokens = highlighter.codeToThemedTokens(code, lang)
-      return shiki.renderToHtml(tokens, {
-        fg: highlighter.getForegroundColor('dark-plus'),
-        bg: highlighter.getBackgroundColor('dark-plus'),
+      return highlighter.codeToHtml(text, {
+        lang: lang || 'text',
+        theme: 'dark-plus',
 
-        elements: {
-          pre({ className, style, children }) {
-            const pre = `<pre class="not-prose overflow-auto p-4 leading-normal ${
-              filename ? 'rounded-b' : 'rounded'
-            }" style="${style}" tabindex="0">${children}</pre>`
+        transformers: [
+          {
+            postprocess(html) {
+              if (filename) {
+                return `
+                  <div class="my-5">
+                    <div class="text-white bg-zinc-800 rounded-t py-2 px-3">${filename}</div>
+                    ${html}
+                  </div>`
+              }
+              else {
+                return html
+              }
+            },
 
-            return filename
-              ? `
-<div class="my-5">
-  <div class="text-white bg-zinc-800 rounded-t py-1 px-3">${filename}</div>
-  ${pre}
-</div>`
-              : pre
-          }
-        }
+            pre(element) {
+              element.properties.class += ` not-prose leading-normal overflow-auto p-4 ${filename ? 'rounded-b' : 'rounded'}`
+            },
+          },
+        ],
       })
-    }
-  }
+    },
+  },
 })
 
 marked.use(gfmHeadingId())
@@ -58,11 +66,7 @@ for (const file of files) {
     const lang = file.name
     const outputDir = path.join('.html', lang)
     await fs.mkdir(outputDir, { recursive: true })
-
-    const { default: messages } = await import(`./docs/${lang}/messages.json`, {
-      assert: { type: 'json' }
-    })
-
+    const { default: messages } = await import(`./docs/${lang}/messages.json`)
     const _toc = {}
 
     for (const [chapterId, files] of Object.entries(toc)) {
@@ -71,22 +75,22 @@ for (const file of files) {
       for (const file of files) {
         urls.push(`/${lang}/${file}`)
         const content = await fs.readFile(
-          path.join('docs', lang, file + '.md'),
-          'utf-8'
+          path.join('docs', lang, `${file}.md`),
+          'utf-8',
         )
 
         const htmlContent = await marked.parse(content)
-        const outputPath = path.join(outputDir, path.basename(file) + '.html')
+        const outputPath = path.join(outputDir, `${path.basename(file)}.html`)
         await fs.writeFile(outputPath, htmlContent)
         const headings = getHeadingList()
         headings.forEach(item => (item.text = decode(item.text)))
-        chapter[headings[0].text] = { headings, file }
+        chapter[headings[0].text] = { file, headings }
       }
     }
 
     await fs.writeFile(
       path.join(outputDir, 'toc.json'),
-      JSON.stringify(_toc, null, 2)
+      JSON.stringify(_toc, null, 2),
     )
   }
 }

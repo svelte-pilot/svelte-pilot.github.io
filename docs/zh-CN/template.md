@@ -3,14 +3,16 @@
 基于 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 路由库的[模板](https://github.com/svelte-pilot/svelte-pilot-template)，提供了服务端渲染（SSR）和其他丰富功能。
 
 ## 核心特性
+
 - **多种部署模式**：无论是 SSR（服务端渲染）、SSG（静态站点生成）、SPA（单页应用程序），还是无服务器函数，应有尽有。
 - **强大的路由和布局系统**：由 [Svelte Pilot](https://github.com/svelte-pilot/svelte-pilot) 提供支持。
 - **集成 TypeScript**：以实现类型安全和稳健的编码。
 - **集成 PostCSS 和 Tailwind CSS**：无需配置开箱即用。
 - **方便的图片导入**：通过 [svelte-preprocess-import-assets](https://github.com/bluwy/svelte-preprocess-import-assets)，`<img src="./img.png">` 标签直接导入图片，无需手写 `import`。
-- **增强 CSS 隔离**：通过 [svelte-preprocess-css-hash](https://github.com/jiangfengming/svelte-preprocess-css-hash)，`<Child class="--child">` 变为 `<Child class="--child-HaShEd">`。
+- **增强 CSS 隔离**：通过 [svelte-preprocess-css-hash](https://github.com/jiangfengming/svelte-preprocess-css-hash)，`<Child class="-child">` 变为 `<Child class="-child-HaShEd">`。
 
 ## 快速预览
+
 在 [StackBlitz 在线 IDE](https://stackblitz.com/~/github.com/svelte-pilot/svelte-pilot-template?startScript=dev:ssr) 上体验可编辑的演示。
 
 ## 创建项目
@@ -53,7 +55,7 @@ npm run build:netlify
 
 # Netlify Edge Functions
 cp src/adapters/netlify-edge/netlify.toml .
-npm run build:netlify-edge 
+npm run build:netlify-edge
 ```
 
 ## 运行
@@ -86,7 +88,6 @@ wrangler pages deploy dist
 
 使用 CLI `netlify deploy` 部署，或将您的 Git 仓库链接到 Netlify。
 
-
 ## 常见问题
 
 ### Windows 上无法运行
@@ -94,4 +95,5 @@ wrangler pages deploy dist
 ```sh
 npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
 ```
+
 [How to set shell for npm run-scripts in Windows](https://stackoverflow.com/questions/23243353/how-to-set-shell-for-npm-run-scripts-in-windows)

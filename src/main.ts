@@ -1,29 +1,33 @@
+import { hydrate } from 'svelte'
 import { ClientApp, type SSRState } from 'svelte-pilot'
+
 import ClientContext from './context/ClientContext'
 import router from './router'
+
+import 'virtual:uno.css'
+import '@unocss/reset/tailwind-compat.css'
 
 declare global {
   interface Window {
     __SSR__?: {
-      state?: SSRState
       rewrite?: string
+      state?: SSRState
     }
   }
 }
 
 router.start(
   () => {
-    new ClientApp({
+    hydrate(ClientApp, {
+      props: { router },
       target: document.body,
-      hydrate: Boolean(window.__SSR__?.state),
-      props: { router }
     })
 
     delete window.__SSR__
   },
   {
     clientContext: new ClientContext(),
+    path: window.__SSR__?.rewrite,
     ssrState: window.__SSR__?.state,
-    path: window.__SSR__?.rewrite
-  }
+  },
 )

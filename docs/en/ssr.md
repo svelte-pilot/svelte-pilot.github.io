@@ -20,16 +20,17 @@ The main code structure for SSR is as follows:
 In the development environment, we need an HTTP service to provide SSR and HMR (Hot Module Replacement) features. Example:
 
 ```js
-/// file: ssr-dev-server.js
-import fs from 'fs'
-import { createServer } from 'http'
+// file: ssr-dev-server.js
+import fs from 'node:fs'
+import { createServer } from 'node:http'
+import process from 'node:process'
 import { createServer as createViteDevServer } from 'vite'
 
 const PORT = Number(process.env.PORT) || 5173
 
 const vite = await createViteDevServer({
+  appType: 'custom',
   server: { middlewareMode: true },
-  appType: 'custom'
 })
 
 createServer((req, res) => {
@@ -46,25 +47,26 @@ createServer((req, res) => {
       // 3. Load the server entry. ssrLoadModule automatically transforms
       //    ESM source code to be usable in Node.js! There is no bundling
       //    required, and provides efficient invalidation similar to HMR.
-      const { default: render } = await vite.ssrLoadModule('/src/render.ts')
+      const { default: render } = await vite.ssrLoadModule('./src/render.js')
 
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
       const {
+        body,
+        headers,
         statusCode = 200,
         statusMessage,
-        headers,
-        body
       } = await render({
-        url: req.url,
+        headers: req.headers,
         template,
-        headers: req.headers
+        url: req.url,
       })
 
       res.writeHead(statusCode, statusMessage, headers)
       res.end(body)
-    } catch (e) {
+    }
+    catch (e) {
       // If an error is caught, let Vite fix the stack trace so it maps back
       // to your actual source code.
       vite.ssrFixStacktrace(e)
@@ -81,11 +83,13 @@ console.log(`Server running at http://localhost:${PORT}`)
 ## Server-Side Renderer
 
 ```js
-/// file: src/render.js
+// file: src/render.js
+import { render } from 'svelte/server'
 import { ServerApp } from 'svelte-pilot'
+
 import router from './router'
 
-export default async function render({ url, template }) {
+export default async function ({ template, url }) {
   try {
     const route = await router.handleServer(
       new URL(url, 'http://127.0.0.1').href
@@ -93,37 +97,40 @@ export default async function render({ url, template }) {
 
     if (!route) {
       return {
-        statusCode: 404,
         body: import.meta.env.DEV
           ? `${url} did not match any routes. Did you forget to add a catch-all route?`
-          : '404 Not Found'
+          : '404 Not Found',
+        statusCode: 404
       }
     }
 
-    const body = ServerApp.render({ router, route })
+    const html = render(ServerApp, {
+      props: { route, router }
+    })
 
     return {
-      statusCode: 200,
+      body: template
+        .replace('</head>', `${html.head}</head>`)
+        .replace(
+          '<div id="app">',
+          `<div id="app">${
+            html.body
+          }<script>__SSR_STATE__ = ${serialize(route.ssrState)}</script>`
+        ),
 
       headers: {
         'Content-Type': 'text/html'
       },
 
-      body: template
-        .replace('</head>', body.head + '</head>')
-        .replace(
-          '<div id="app">',
-          '<div id="app">' +
-            body.html +
-            `<script>__SSR_STATE__ = ${serialize(route.ssrState)}</script>`
-        )
+      statusCode: 200
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
 
     return {
-      statusCode: 500,
-      body: import.meta.env.DEV && e instanceof Error ? e.message : ''
+      body: import.meta.env.DEV && e instanceof Error ? e.message : '',
+      statusCode: 500
     }
   }
 }
@@ -136,17 +143,19 @@ function serialize(data) {
 ## Client Entry Point
 
 ```js
-/// file: src/main.js
+// file: src/main.js
 import './app.css'
+
+import { hydrate } from 'svelte'
 import { ClientApp } from 'svelte-pilot'
+
 import router from './router'
 
 router.start(
   () => {
-    new ClientApp({
-      target: document.getElementById('app'),
-      hydrate: true,
-      props: { router }
+    hydrate(ClientApp, {
+      props: { router },
+      target: document.getElementById('app')
     })
 
     delete window.__SSR_STATE__
@@ -155,27 +164,6 @@ router.start(
     ssrState: window.__SSR_STATE__
   }
 )
-```
-
-## Build Configuration
-
-Configure the `hydratable` option of Svelte to `true` in `vite.config.js`:
-
-```js
-/// file: vite.config.js
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    svelte({
-      compilerOptions: {
-        hydratable: true
-      }
-    })
-  ]
-})
 ```
 
 Now, run `node ssr-dev-server.js` in the command line to start the HTTP service for the development environment and visit `http://localhost:5173` to see the effect.
@@ -187,11 +175,12 @@ We can observe the existence of a [FOUC (Flash of Unstyled Content)](https://en.
 Next, we create an entry file `src/server.js` for the production environment:
 
 ```js
-/// file: src/server.js
-import { createServer } from 'http'
+// file: src/server.js
+import { createServer } from 'node:http'
 import sirv from 'sirv'
-import render from './render'
+
 import template from '../dist/client/index.html?raw'
+import render from './render'
 
 const PORT = Number(process.env.PORT) || 5173
 const serve = sirv('../client')
@@ -201,14 +190,14 @@ createServer(async (req, res) => {
 
   serve(req, res, async () => {
     const {
-      statusCode = 200,
-      statusMessage,
+      body,
       headers,
-      body
+      statusCode = 200,
+      statusMessage
     } = await render({
-      url: req.url,
+      headers: req.headers,
       template,
-      headers: req.headers
+      url: req.url
     })
 
     if (statusMessage) {
@@ -248,16 +237,16 @@ Now, we can run `npm run build:ssr` in the command line to build the code for th
 We can export a `load` function in the view component to load data. For example:
 
 ```svelte
-<script context="module">
+<script context='module'>
   export async function load() {
     return {
-      user: 'World'
+      user: 'World',
     }
   }
 </script>
 
 <script>
-  export let user
+  let { user } = $props()
 </script>
 
 <h1>Hello {user}!</h1>
@@ -266,6 +255,7 @@ We can export a `load` function in the view component to load data. For example:
 The `load` function is called during server-side rendering, and the returned data is passed to the view component. In `render.js`, we embedded the data into HTML, and during client-side rendering, we provide the data to the router for hydration.
 
 The `load` function accepts three parameters:
+
 - `props`: The `props` object of the view component.
 - `route`: The current [route object](router#route).
 - `context`: A custom context object. Passed as the second parameter when calling [router.handleServer()](router#routerhandleserver). You can store information like `headers`, `cookies`, etc., of the current request in the `context` object and also set the response’s `statusCode`, `statusMessage`, `headers`, etc. The specific implementation can be referred to in the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project, details of which are not reiterated here.
@@ -295,7 +285,7 @@ Example:
 
 ```js
 export async function load({ id }, route, ctx) {
-  const user = await ctx.api.get('/user/' + id)
+  const user = await ctx.api.get(`/user/${id}`)
 
   if (!user) {
     /*
@@ -304,8 +294,8 @@ export async function load({ id }, route, ctx) {
       On the client-side, we can call router.handleClient('/404') to render the 404 page.
     */
     ctx.rewrite('/404')
-    return
-  } else {
+  }
+  else {
     return { user }
   }
 }

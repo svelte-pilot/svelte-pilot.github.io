@@ -20,16 +20,17 @@ SSR 的主要代码结构如下：
 在开发环境中，我们需要一个 HTTP 服务来提供 SSR 和 HMR（模块热替换） 功能。例子：
 
 ```js
-/// file: ssr-dev-server.js
-import fs from 'fs'
-import { createServer } from 'http'
+// file: ssr-dev-server.js
+import fs from 'node:fs'
+import { createServer } from 'node:http'
+import process from 'node:process'
 import { createServer as createViteDevServer } from 'vite'
 
 const PORT = Number(process.env.PORT) || 5173
 
 const vite = await createViteDevServer({
+  appType: 'custom',
   server: { middlewareMode: true },
-  appType: 'custom'
 })
 
 createServer((req, res) => {
@@ -46,25 +47,26 @@ createServer((req, res) => {
       // 3. Load the server entry. ssrLoadModule automatically transforms
       //    ESM source code to be usable in Node.js! There is no bundling
       //    required, and provides efficient invalidation similar to HMR.
-      const { default: render } = await vite.ssrLoadModule('/src/render.ts')
+      const { default: render } = await vite.ssrLoadModule('./src/render.js')
 
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
       const {
+        body,
+        headers,
         statusCode = 200,
         statusMessage,
-        headers,
-        body
       } = await render({
-        url: req.url,
+        headers: req.headers,
         template,
-        headers: req.headers
+        url: req.url,
       })
 
       res.writeHead(statusCode, statusMessage, headers)
       res.end(body)
-    } catch (e) {
+    }
+    catch (e) {
       // If an error is caught, let Vite fix the stack trace so it maps back
       // to your actual source code.
       vite.ssrFixStacktrace(e)
@@ -81,11 +83,13 @@ console.log(`Server running at http://localhost:${PORT}`)
 ## 服务端渲染器
 
 ```js
-/// file: src/render.js
+// file: src/render.js
+import { render } from 'svelte/server'
 import { ServerApp } from 'svelte-pilot'
+
 import router from './router'
 
-export default async function render({ url, template }) {
+export default async function ({ template, url }) {
   try {
     const route = await router.handleServer(
       new URL(url, 'http://127.0.0.1').href
@@ -93,37 +97,40 @@ export default async function render({ url, template }) {
 
     if (!route) {
       return {
-        statusCode: 404,
         body: import.meta.env.DEV
           ? `${url} did not match any routes. Did you forget to add a catch-all route?`
-          : '404 Not Found'
+          : '404 Not Found',
+        statusCode: 404
       }
     }
 
-    const body = ServerApp.render({ router, route })
+    const html = render(ServerApp, {
+      props: { route, router }
+    })
 
     return {
-      statusCode: 200,
+      body: template
+        .replace('</head>', `${html.head}</head>`)
+        .replace(
+          '<div id="app">',
+          `<div id="app">${
+            html.body
+          }<script>__SSR_STATE__ = ${serialize(route.ssrState)}</script>`
+        ),
 
       headers: {
         'Content-Type': 'text/html'
       },
 
-      body: template
-        .replace('</head>', body.head + '</head>')
-        .replace(
-          '<div id="app">',
-          '<div id="app">' +
-            body.html +
-            `<script>__SSR_STATE__ = ${serialize(route.ssrState)}</script>`
-        )
+      statusCode: 200
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
 
     return {
-      statusCode: 500,
-      body: import.meta.env.DEV && e instanceof Error ? e.message : ''
+      body: import.meta.env.DEV && e instanceof Error ? e.message : '',
+      statusCode: 500
     }
   }
 }
@@ -136,17 +143,19 @@ function serialize(data) {
 ## 客户端入口
 
 ```js
-/// file: src/main.js
+// file: src/main.js
 import './app.css'
+
+import { hydrate } from 'svelte'
 import { ClientApp } from 'svelte-pilot'
+
 import router from './router'
 
 router.start(
   () => {
-    new ClientApp({
-      target: document.getElementById('app'),
-      hydrate: true,
-      props: { router }
+    hydrate(ClientApp, {
+      props: { router },
+      target: document.getElementById('app')
     })
 
     delete window.__SSR_STATE__
@@ -155,27 +164,6 @@ router.start(
     ssrState: window.__SSR_STATE__
   }
 )
-```
-
-## 编译配置
-
-在 `vite.config.js` 中配置 Svelte 的编译选项 `hydratable` 为 `true`：
-
-```js
-/// file: vite.config.js
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    svelte({
-      compilerOptions: {
-        hydratable: true
-      }
-    })
-  ]
-})
 ```
 
 现在，我们可以在命令行中运行 `node ssr-dev-server.js` 来启动开发环境 HTTP 服务，然后访问 `http://localhost:5173` 来查看效果。
@@ -187,11 +175,12 @@ export default defineConfig({
 接下来，我们创建生产环境的入口文件 `src/server.js`：
 
 ```js
-/// file: src/server.js
-import { createServer } from 'http'
+// file: src/server.js
+import { createServer } from 'node:http'
 import sirv from 'sirv'
-import render from './render'
+
 import template from '../dist/client/index.html?raw'
+import render from './render'
 
 const PORT = Number(process.env.PORT) || 5173
 const serve = sirv('../client')
@@ -201,14 +190,14 @@ createServer(async (req, res) => {
 
   serve(req, res, async () => {
     const {
-      statusCode = 200,
-      statusMessage,
+      body,
       headers,
-      body
+      statusCode = 200,
+      statusMessage
     } = await render({
-      url: req.url,
+      headers: req.headers,
       template,
-      headers: req.headers
+      url: req.url
     })
 
     if (statusMessage) {
@@ -248,16 +237,16 @@ npm i sirv
 我们可以在视图组件中导出 `load` 函数来加载数据。例子：
 
 ```svelte
-<script context="module">
+<script context='module'>
   export async function load() {
     return {
-      user: 'World'
+      user: 'World',
     }
   }
 </script>
 
 <script>
-  export let user
+  let { user } = $props()
 </script>
 
 <h1>Hello {user}!</h1>
@@ -266,11 +255,13 @@ npm i sirv
 `load` 函数会在服务端渲染时被调用，返回的数据会被传递到视图组件中。在 `render.js` 中，我们将数据嵌入了 HTML 中，然后在客户端渲染时，我们将数据提供给路由器进行水合（hydration）。
 
 `load` 函数接受三个参数：
+
 - `props`：视图组件的 `props` 对象。
 - `route`：当前[路由对象](router#route)。
 - `context`: 自定义上下文对象。在调用 [router.handleServer()](router#routerhandleserver) 时作为第二个参数传入。你可以通过 `context` 对象储存当前请求的 `headers`、`cookies` 等信息，还可以实现设置响应的 `statusCode`、`statusMessage`、`headers` 等功能。具体实现可以参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目，这里不再赘述。
 
 ### 客户端调用 load 函数
+
 当我们在客户端使用 HTML5 History API 进行路由跳转时，视图组件的 `load` 函数默认不会被调用，这会导致客户端渲染时缺少数据。我们有三种解决办法：
 
 #### 不使用 HTML5 History API
@@ -294,7 +285,7 @@ npm i sirv
 
 ```js
 export async function load({ id }, route, ctx) {
-  const user = await ctx.api.get('/user/' + id)
+  const user = await ctx.api.get(`/user/${id}`)
 
   if (!user) {
     /*
@@ -303,8 +294,8 @@ export async function load({ id }, route, ctx) {
       在客户端，我们可以调用 router.handleClient('/404') 来渲染 404 页面。
     */
     ctx.rewrite('/404')
-    return
-  } else {
+  }
+  else {
     return { user }
   }
 }

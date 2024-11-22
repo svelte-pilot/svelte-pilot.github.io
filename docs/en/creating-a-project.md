@@ -17,14 +17,14 @@ npm i svelte-pilot
 Then, we create a route configuration file `src/router.js`:
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      component: () => import('./App.svelte')
+      component: () => import('./App.svelte'),
+      path: '/'
     }
   ]
 })
@@ -33,17 +33,19 @@ export default new Router({
 Finally, we modify `src/main.js` to start the router:
 
 ```js
-/// file: src/main.js
+// file: src/main.js
 import './app.css'
+
+import { mount } from 'svelte'
 import { ClientApp } from 'svelte-pilot'
+
 import router from './router'
 
-router.start(
-  () =>
-    new ClientApp({
-      target: document.getElementById('app'),
-      props: { router }
-    })
+router.start(() =>
+  mount(ClientApp, {
+    props: { router },
+    target: document.getElementById('app')
+  })
 )
 ```
 

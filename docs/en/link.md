@@ -5,7 +5,7 @@ The `<Link>` component is used to navigate to a specified route. It is similar i
 ## Usage
 
 ```svelte
-<Link to="..." method="...">text</Link>
+<Link to='...' method='...'>text</Link>
 ```
 
 The `to` attribute of the `<Link>` component is used to specify the route to navigate to. Its value can be a string or a [Location object](router#location). The `method` attribute is used to specify the way to navigate, and its values can be `push`, `replace`, or `null`, defaulting to `push`. If the value of `method` is `null`, the router's `push()` or `replace()` methods won’t be called, and a normal page navigation will occur instead. If `to` is an absolute URL starting with `http:` or `https:`, a regular page redirect occurs, unless the `origin` property has been set using `setLinkOptions()`.
@@ -22,9 +22,9 @@ import { linkOptions, setLinkOptions } from 'svelte-pilot'
 console.log(linkOptions)
 
 setLinkOptions({
-  method: null, // 'push' | 'replace' | null
-  class: 'my-link',
   activeClass: 'my-link-active',
+  class: 'my-link',
+  method: null, // 'push' | 'replace' | null
   origin: 'https://example.com' // string | string[]
 })
 ```

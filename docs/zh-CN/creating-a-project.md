@@ -1,7 +1,7 @@
 # 创建一个项目
 
 我们使用 Vite 创建一个 Svelte 项目：
-  
+
 ```sh
 npm create vite@latest my-svelte-app -- --template svelte
 ```
@@ -17,14 +17,14 @@ npm i svelte-pilot
 然后，我们创建路由配置文件`src/router.js`：
 
 ```js
-/// file: src/router.js
+// file: src/router.js
 import { Router } from 'svelte-pilot'
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      component: () => import('./App.svelte')
+      component: () => import('./App.svelte'),
+      path: '/'
     }
   ]
 })
@@ -33,17 +33,19 @@ export default new Router({
 最后，我们修改`src/main.js`以启动路由器：
 
 ```js
-/// file: src/main.js
+// file: src/main.js
 import './app.css'
+
+import { mount } from 'svelte'
 import { ClientApp } from 'svelte-pilot'
+
 import router from './router'
 
-router.start(
-  () =>
-    new ClientApp({
-      target: document.getElementById('app'),
-      props: { router }
-    })
+router.start(() =>
+  mount(ClientApp, {
+    props: { router },
+    target: document.getElementById('app')
+  })
 )
 ```
 

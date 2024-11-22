@@ -238,8 +238,8 @@ type Errorhandler = (error: unknown) => void
 2. 调用 `beforeCurrentRouteLeave` 事件处理器。
 3. 调用 `beforeChange` 事件处理器。
 4. 调用即将进入的路由的视图树中的 `beforeEnter` 事件处理器。
-5. 调用同步加载的 Svelte 组件中 `<script context="module">` 导出的 `beforeEnter` 事件处理器。
-5. 调用异步加载的 Svelte 组件中 `<script context="module">` 导出的 `beforeEnter` 事件处理器。
+5. 调用同步加载的 Svelte 组件中 `<script module>` 导出的 `beforeEnter` 事件处理器。
+5. 调用异步加载的 Svelte 组件中 `<script module>` 导出的 `beforeEnter` 事件处理器。
 6. 调用 `update` 事件处理器。
 7. 调用 `afterChange` 事件处理器。
 
