@@ -168,7 +168,7 @@ router.start(
 
 Now, run `node ssr-dev-server.js` in the command line to start the HTTP service for the development environment and visit `http://localhost:5173` to see the effect.
 
-We can observe the existence of a [FOUC (Flash of Unstyled Content)](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) issue. In production mode, for projects that use UnoCSS, this can be resolved by setting the Vite configuration option `build.cssCodeSplit` to `true`. If your CSS is too large and needs to be loaded on demand, you can read the Vite compiled [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) file, and then insert the CSS files required for the current page into the HTML during server-side rendering. A specific implementation can be referred to in the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project.
+We can observe the existence of a [FOUC (Flash of Unstyled Content)](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) issue. In production mode, for projects that use Tailwind CSS or UnoCSS, this can be resolved by setting the Vite configuration option `build.cssCodeSplit` to `false`. If your CSS is too large and needs to be loaded on demand, you can read the Vite compiled [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) file, and then insert the CSS files required for the current page into the HTML during server-side rendering. A specific implementation can be referred to in the [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) project.
 
 ## Server Entry Point
 

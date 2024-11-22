@@ -168,7 +168,7 @@ router.start(
 
 现在，我们可以在命令行中运行 `node ssr-dev-server.js` 来启动开发环境 HTTP 服务，然后访问 `http://localhost:5173` 来查看效果。
 
-我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题。在生产模式下，对于使用了 UnoCSS 的项目，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `true` 来解决。如果你的 CSS 太大，需要按需加载，可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目。
+我们能看到存在 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) 问题。在生产模式下，对于使用了 Tailwind CSS 或 UnoCSS 的项目，我们可以通过设置 Vite 的配置项 `build.cssCodeSplit` 为 `false` 来解决。如果你的 CSS 太大，需要按需加载，可以通过读取 Vite 编译生成的 [ssr-manifest.json](https://vitejs.dev/guide/ssr.html#generating-preload-directives) 文件，然后在服务端渲染时把当前页面所需的 CSS 文件插入到 HTML 中。具体实现可以参考 [svelte-pilot-template](https://github.com/svelte-pilot/svelte-pilot-template) 项目。
 
 ## 服务端入口
 
