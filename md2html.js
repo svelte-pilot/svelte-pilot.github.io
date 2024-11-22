@@ -1,13 +1,12 @@
+// @ts-check
 /* eslint-disable antfu/no-top-level-await */
 import fs from 'node:fs/promises'
 import path from 'node:path'
-// @ts-check
 import { decode } from 'html-entities'
 import { Marked } from 'marked'
 import { getHeadingList, gfmHeadingId } from 'marked-gfm-heading-id'
 import { getSingletonHighlighter } from 'shiki'
-
-import toc from './docs/toc.json'
+import toc from './docs/toc.json' with { type: 'json'}
 
 const highlighter = await getSingletonHighlighter({
   langs: ['sh', 'js', 'svelte', 'json'],
@@ -66,7 +65,7 @@ for (const file of files) {
     const lang = file.name
     const outputDir = path.join('.html', lang)
     await fs.mkdir(outputDir, { recursive: true })
-    const { default: messages } = await import(`./docs/${lang}/messages.json`)
+    const { default: messages } = await import(`./docs/${lang}/messages.json`, { with: { type: 'json' } })
     const _toc = {}
 
     for (const [chapterId, files] of Object.entries(toc)) {

@@ -5,7 +5,7 @@ import process from 'node:process'
 import render from '../../render'
 
 import _template from '/dist/index.html?raw'
-import urls from '/ssg.json'
+import urls from '/ssg.json' with { type: 'json'}
 
 async function main() {
   const nojs = process.env.NOJS === '1'
